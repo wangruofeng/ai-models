@@ -2,6 +2,8 @@
 
 基于 [pi.dev/models](https://pi.dev/models) 的数据与设计复刻的 AI 大模型目录站。
 
+**线上地址**：<https://blog.wangruofeng007.com/ai-models/>（GitHub Pages 部署，仓库 [wangruofeng/ai-models](https://github.com/wangruofeng/ai-models)）
+
 ## 数据
 
 - **1404 个模型**，来自 **39 个 provider**（amazon-bedrock、anthropic、openai、openrouter、vercel-ai-gateway、zai 等）
