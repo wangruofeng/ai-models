@@ -1,0 +1,6 @@
+# 提取过程中间产物（快照、DOM 数据、对比截图等）
+reference/
+.omx/
+.playwright-mcp/
+node_modules/
+.DS_Store

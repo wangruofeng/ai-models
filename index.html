@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Catalog · Pi</title>
+  <meta name="description" content="Catalog of AI models across providers: context window, input/output and cache pricing.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23F4F2F0'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' text-anchor='middle' fill='%23252F3D'%3E%CF%80%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // 尽早应用主题与语言，避免闪烁
+    (function () {
+      try {
+        var t = localStorage.getItem('pi-theme') || 'auto';
+        document.documentElement.dataset.theme = t;
+        var lang = localStorage.getItem('pi-lang');
+        if (!lang) lang = /^zh\b|zh-/i.test(navigator.language || '') ? 'zh-CN' : 'en';
+        document.documentElement.lang = lang === 'zh-CN' ? 'zh-CN' : 'en';
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+</head>
+<body>
+  <nav class="sticky-nav">
+    <div class="sticky-nav-inner">
+      <a class="sticky-nav-logo" href="https://pi.dev/" aria-label="Pi home" data-i18n-aria="navHome">
+        <svg class="pi-logo-mark" viewBox="0 0 44 44" width="44" height="44" role="img" aria-hidden="true">
+          <rect x="1" y="1" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="22" y="31" font-family="Georgia, 'Times New Roman', serif" font-size="28" text-anchor="middle" fill="currentColor">&#960;</text>
+        </svg>
+      </a>
+      <div class="sticky-nav-controls">
+        <button class="nav-toggle" id="theme-toggle" type="button" data-i18n-title="themeTitle" title="Cycle theme">Auto</button>
+        <span class="sticky-nav-controls-sep" aria-hidden="true">&middot;</span>
+        <button class="nav-toggle" id="lang-toggle" type="button" data-i18n-title="langTitle" title="Switch language">中文</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content-shell models-dashboard">
+    <header class="content-hero">
+      <h1 class="content-title" data-i18n="h1">Model Catalog</h1>
+    </header>
+
+    <section class="surface-panel content-card data-table-card">
+      <header class="content-card-header">
+        <h2 class="content-card-title" data-i18n="h2">All models</h2>
+        <div class="content-card-actions"><span id="model-count" aria-live="polite">&hellip;</span></div>
+      </header>
+      <div class="content-card-body">
+        <div class="action-bar models-action-bar">
+          <label class="action-bar-field">
+            <span class="field-label" data-i18n="filterName">Filter by name</span>
+            <input class="text-control" id="name-filter" type="search" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="action-bar-field">
+            <span class="field-label" data-i18n="filterProvider">Filter by provider</span>
+            <select class="select-control" id="provider-filter"></select>
+          </label>
+          <button class="text-control reset-button" id="reset-filters" type="button" data-i18n="reset">[ Reset ]</button>
+        </div>
+
+        <div class="data-table-wrap models-catalog-table-wrap">
+          <table class="data-table models-catalog-table">
+            <caption class="visually-hidden" data-i18n="caption">All models</caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="thModel">Model</th>
+                <th scope="col" class="data-table-col-num" data-i18n="thContext">Context</th>
+                <th scope="col" class="data-table-col-num" data-i18n="thInput">Input&nbsp;$/M</th>
+                <th scope="col" class="data-table-col-num" data-i18n="thOutput">Output&nbsp;$/M</th>
+                <th scope="col" class="data-table-col-num" data-i18n="thCacheRead">Cache&nbsp;read&nbsp;$/M</th>
+                <th scope="col" class="data-table-col-num" data-i18n="thCacheWrite">Cache&nbsp;write&nbsp;$/M</th>
+              </tr>
+            </thead>
+            <tbody id="models-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
