@@ -20,6 +20,8 @@
       filterProvider: 'Filter by provider',
       allProviders: 'All providers',
       reset: '[ Reset ]',
+      imageText: 'Text',
+      imageImage: 'Image',
       thModel: 'Model',
       thContext: 'Context',
       thInput: 'Input $/M',
@@ -45,6 +47,8 @@
       filterProvider: '按提供商筛选',
       allProviders: '所有提供商',
       reset: '[ 重置 ]',
+      imageText: '文本',
+      imageImage: '图片',
       thModel: '模型',
       thContext: '上下文',
       thInput: '输入 $/M',
@@ -135,11 +139,11 @@
   }
 
   function formatContext(v) {
-    return typeof v === 'number' ? v.toLocaleString('en-US') : escapeHtml(v == null ? '' : v);
+    return typeof v === 'number' ? v.toLocaleString('en-US') : escapeHtml(v == null ? '—' : v);
   }
 
   function formatPrice(v) {
-    if (v == null) return '';
+    if (v == null) return '—';
     return typeof v === 'number' ? '$' + v : escapeHtml(v);
   }
 
@@ -176,12 +180,13 @@
       for (var j = 0; j < items.length; j++) {
         var d = items[j];
         html += '<tr><th scope="row" class="models-model-col">' +
-          '<a href="' + ORIGIN + '/models/' + encodeURIComponent(d.p) + '/' + encodeURIComponent(d.id) + '">' + escapeHtml(d.n) + '</a>' +
-          '<code>' + escapeHtml(d.id) + '</code></th>' +
+          '<a href="' + escapeHtml(d.source || (ORIGIN + '/models/' + encodeURIComponent(d.p) + '/' + encodeURIComponent(d.id))) + '">' + escapeHtml(d.n) + '</a>' +
+          '<code>' + escapeHtml(d.id) + '</code>' +
+          (d.description ? '<small>' + escapeHtml(d.description) + '</small>' : '') + '</th>' +
           '<td class="data-table-col-num">' + formatContext(d.ctx) + '</td>' +
-          '<td class="data-table-col-num">' + formatPrice(d.in) + '</td>' +
-          '<td class="data-table-col-num">' + formatPrice(d.out) + '</td>' +
-          '<td class="data-table-col-num">' + formatPrice(d.cr) + '</td>' +
+          '<td class="data-table-col-num">' + (d.imagePricing ? t('imageText') + ' ' + formatPrice(d.in) + '<br>' + t('imageImage') + ' ' + formatPrice(d.imagePricing.input) : formatPrice(d.in)) + '</td>' +
+          '<td class="data-table-col-num">' + (d.imagePricing ? t('imageImage') + ' ' : '') + formatPrice(d.out) + '</td>' +
+          '<td class="data-table-col-num">' + (d.imagePricing ? t('imageText') + ' ' + formatPrice(d.cr) + '<br>' + t('imageImage') + ' ' + formatPrice(d.imagePricing.cachedInput) : formatPrice(d.cr)) + '</td>' +
           '<td class="data-table-col-num">' + formatPrice(d.cw) + '</td></tr>';
       }
     });
