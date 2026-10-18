@@ -2,6 +2,11 @@
 (function () {
   'use strict';
 
+  document.getElementById('footer-github').hidden = !(
+    window.location.protocol === 'file:' ||
+    ['localhost', '127.0.0.1', '[::1]'].indexOf(window.location.hostname) !== -1
+  );
+
   var ORIGIN = 'https://pi.dev';
   var state = { query: '', provider: 'all', contextRanges: [], sota: 'all', openWeights: 'all', china: 'all' };
   var FILTER_CACHE_KEY = 'pi-model-filters';
