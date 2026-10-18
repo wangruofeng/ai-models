@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>模型目录 — 找到适合你的 AI 模型</title>
+  <meta name="description" content="在一处查看 AI 模型的价格、上下文和旗舰标识，筛选开源与国产模型，以多种货币比较成本。">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="about.css">
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem('pi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-copy="skip">跳到正文</a>
+  <header class="page-header wrap">
+    <nav class="pill-nav" aria-label="主导航">
+      <a class="brand" href="about.html"><img src="icon.svg" width="25" height="25" alt=""><span data-copy="brand">模型目录</span></a>
+      <div class="nav-links"><a href="#preview" data-copy="navPreview">看一看</a><a href="#features" data-copy="navFeatures">功能</a><a href="#questions" data-copy="navFaq">常见问题</a></div>
+      <div class="nav-actions"><button id="intro-lang" type="button" aria-label="Switch language">EN</button><button id="intro-theme" type="button" aria-label="切换主题"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button></div>
+    </nav>
+  </header>
+  <main id="main" class="wrap">
+    <section class="hero">
+      <p class="eyebrow">AI MODELS, AT A GLANCE</p>
+      <h1><span data-copy="brand">模型目录</span><span class="title-dot">.</span></h1>
+      <p class="hero-description" data-copy="hero">选模型之前，把价格与能力看清楚。</p>
+      <p class="hero-detail" data-copy="detail">从上下文大小到输入输出价格，从旗舰模型到开放权重。在一个目录里，找到适合下一次创作、编程与探索的模型。</p>
+      <div class="hero-facts"><span><strong id="intro-model-count">—</strong> <span data-copy="models">个模型</span></span><i>·</i><span><strong id="intro-provider-count">—</strong> <span data-copy="providers">个提供商入口</span></span><i>·</i><span data-copy="currencies">6 种计价货币</span><i>·</i><span data-copy="noSignup">无需登录</span></div>
+      <div class="hero-actions"><a class="button primary" href="index.html"><span data-copy="browse">浏览模型目录</span><span aria-hidden="true">↗</span></a><a class="button secondary" href="#preview" data-copy="explore">先看看如何使用</a></div>
+    </section>
+    <section id="preview" class="section preview-section">
+      <p class="section-kicker" data-copy="previewKicker">00 · 看一看</p>
+      <h2 data-copy="previewTitle">模型很多，比较可以简单一点。</h2>
+      <p class="section-description" data-copy="previewDescription">把分散的信息放到一起，用熟悉的方式筛选、排序，再做选择。</p>
+      <div class="catalog-stage">
+        <div class="catalog-window">
+          <div class="window-bar"><div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div><span>MODEL CATALOG</span><span class="preview-live" data-copy="previewLive">目录数据预览</span></div>
+          <div class="preview-toolbar"><span data-copy="sample">精选模型</span><div class="preview-tabs" role="group" aria-label="预览内容"><button type="button" data-view="price" aria-pressed="true" data-copy="priceTab">看价格</button><button type="button" data-view="context" aria-pressed="false" data-copy="contextTab">看上下文</button></div></div>
+          <div class="preview-table-wrap"><table class="preview-table"><thead><tr><th data-copy="model">模型</th><th id="preview-col-two">输入 / 1M tokens</th><th id="preview-col-three">输出 / 1M tokens</th></tr></thead><tbody id="intro-preview"><tr><td colspan="3" data-copy="loading">正在读取目录…</td></tr></tbody></table></div>
+          <div class="preview-bottom"><span data-copy="previewNote">美元标准单价 · 价格以提供商为准</span><a href="index.html" data-copy="fullCatalog">打开完整目录 →</a></div>
+        </div>
+      </div>
+      <div class="brand-strip" aria-label="模型品牌"><img src="assets/brands/openai.svg" alt="OpenAI"><img src="assets/brands/claude.svg" alt="Claude"><img src="assets/brands/gemini.svg" alt="Gemini"><img src="assets/brands/deepseek.svg" alt="DeepSeek"><img src="assets/brands/qwen.svg" alt="Qwen"><img src="assets/brands/kimi.svg" alt="Kimi"><span data-copy="andMore">以及更多你熟悉的模型</span></div>
+    </section>
+    <section id="features" class="section">
+      <p class="section-kicker" data-copy="featuresKicker">01 · 为选择减负</p>
+      <h2 data-copy="featuresTitle">先定需求，再找模型。</h2>
+      <div class="feature-list">
+        <article><span class="feature-number">01</span><div><h3 data-copy="f1Title">给长任务，留够上下文。</h3><p data-copy="f1Text">从 32K 以下到 1M 以上，用互不重叠的区间多选筛选。读文档、分析代码，先看看模型装得下多少。</p><div class="range-ruler" aria-hidden="true"><span>32K</span><span>128K</span><span>200K</span><span>1M+</span></div></div></article>
+        <article><span class="feature-number">02</span><div><h3 data-copy="f2Title">同一种货币，比较每一笔成本。</h3><p data-copy="f2Text">美元、人民币、港币、欧元、日元、韩元自由切换。查看输入、输出与缓存价格，按价格排序；汇率使用最新可用数据，注明日期并本地缓存。</p><p class="currency-line" aria-hidden="true">USD <span>↔</span> CNY · HKD · EUR · JPY · KRW</p></div></article>
+        <article><span class="feature-number">03</span><div><h3 data-copy="f3Title">从旗舰到开放权重，各有所长。</h3><p data-copy="f3Text">通过 SOTA、开源与国产标识缩小范围。旗舰按主要能力人工核实，开源包含开放权重；未确认的信息保留“未知”。</p><div class="example-tags"><span>SOTA</span><span data-copy="openTag">开源</span><span data-copy="chinaTag">国产</span></div></div></article>
+        <article><span class="feature-number">04</span><div><h3 data-copy="f4Title">下一次打开，接着上次的选择。</h3><p data-copy="f4Text">收藏常用厂商，让它们排在最前面。筛选条件、货币和排序自动留在本地；明暗主题与中英文切换，让目录适合你的习惯。</p><p class="favorite-example"><img src="assets/brands/kimi.svg" width="22" height="22" alt="">Kimi <span aria-hidden="true">★</span><img src="assets/brands/deepseek.svg" width="22" height="22" alt="">DeepSeek <span aria-hidden="true">★</span></p></div></article>
+      </div>
+    </section>
+    <section id="questions" class="section faq-section">
+      <p class="section-kicker" data-copy="faqKicker">02 · 还有几个问题</p>
+      <h2 data-copy="faqTitle">使用之前，你可能想知道。</h2>
+      <details><summary data-copy="q1">这些模型数据来自哪里？</summary><p data-copy="a1">主要参考 Pi 模型目录，并补充部分官方模型信息。目录展示的是各提供商的模型入口，同一个模型可能在多个平台出现，因此记录数量不等于独立模型数量。</p></details>
+      <details><summary data-copy="q2">这里的价格和汇率怎么理解？</summary><p data-copy="a2">价格通常按每百万 tokens 展示，换算使用最新可用汇率，并非盘中实时行情。图片模型单独区分文本和图片 token，实际账单与可用性请以提供商说明为准。</p></details>
+      <details><summary data-copy="q3">SOTA 和开源标识代表什么？</summary><p data-copy="a3">SOTA 表示按主要能力核实的供应商旗舰，不是跨厂商排名。开源采用包含开放权重的口径，可能带使用限制，使用前请查看模型许可证。</p></details>
+      <details><summary data-copy="q4">我的筛选和收藏会保存在哪里？</summary><p data-copy="a4">保存在当前浏览器的本地存储里，无需账号。重置会清除筛选条件，收藏仍保留；清除浏览器站点数据则会移除这些记录。</p></details>
+    </section>
+    <section class="closing section"><p class="section-kicker">READY WHEN YOU ARE</p><h2 data-copy="closing">下一个合适的模型，从这里找。</h2><a class="button primary" href="index.html"><span data-copy="browse">浏览模型目录</span><span aria-hidden="true">↗</span></a></section>
+  </main>
+  <footer class="wrap footer"><span>© 2026 <a href="https://wangruofeng.com/" target="_blank" rel="noopener noreferrer">wangruofeng</a></span><div><a href="https://wangruofeng.com/" target="_blank" rel="noopener noreferrer" data-copy="blog">博客</a><a href="https://x.com/oneruofeng" target="_blank" rel="noopener noreferrer">X</a><span data-copy="source">数据主要参考</span><a href="https://pi.dev/models" target="_blank" rel="noopener noreferrer">Pi ↗</a></div></footer>
+  <script src="about.js"></script>
+</body>
+</html>

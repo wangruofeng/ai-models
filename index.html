@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Model Catalog · Pi</title>
   <meta name="description" content="Catalog of AI models across providers: context window, input/output and cache pricing.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23F4F2F0'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' text-anchor='middle' fill='%23252F3D'%3E%CF%80%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="stylesheet" href="styles.css">
   <script>
     // 尽早应用主题与语言，避免闪烁
     (function () {
       try {
-        var t = localStorage.getItem('pi-theme') || 'auto';
+        var t = localStorage.getItem('pi-theme');
+        if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.dataset.theme = t;
         var lang = localStorage.getItem('pi-lang');
         if (!lang) lang = /^zh\b|zh-/i.test(navigator.language || '') ? 'zh-CN' : 'en';
@@ -23,25 +24,31 @@
 <body>
   <nav class="sticky-nav">
     <div class="sticky-nav-inner">
-      <a class="sticky-nav-logo" href="https://pi.dev/" aria-label="Pi home" data-i18n-aria="navHome">
-        <svg class="pi-logo-mark" viewBox="0 0 44 44" width="44" height="44" role="img" aria-hidden="true">
-          <rect x="1" y="1" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2"/>
-          <text x="22" y="31" font-family="Georgia, 'Times New Roman', serif" font-size="28" text-anchor="middle" fill="currentColor">&#960;</text>
-        </svg>
-      </a>
+      <span class="nav-project-name"><img class="nav-project-icon" src="icon.svg" width="32" height="32" alt=""><span data-i18n="h1">Model Catalog</span></span>
       <div class="sticky-nav-controls">
-        <button class="nav-toggle" id="theme-toggle" type="button" data-i18n-title="themeTitle" title="Cycle theme">Auto</button>
-        <span class="sticky-nav-controls-sep" aria-hidden="true">&middot;</span>
+        <a class="nav-toggle" href="about.html" data-i18n="navAbout">介绍</a>
         <button class="nav-toggle" id="lang-toggle" type="button" data-i18n-title="langTitle" title="Switch language">中文</button>
+        <span class="sticky-nav-controls-sep" aria-hidden="true">&middot;</span>
+        <button class="nav-toggle theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="theme-moon-mask">
+          <rect width="24" height="24" fill="#fff"></rect>
+          <circle class="theme-toggle-hole" cx="17" cy="7" r="7" fill="#000"></circle>
+        </mask>
+        <circle class="theme-toggle-core" cx="12" cy="12" mask="url(#theme-moon-mask)"></circle>
+        <g class="theme-toggle-rays">
+          <line x1="12" y1="1.6" x2="12" y2="3.8"></line><line x1="12" y1="20.2" x2="12" y2="22.4"></line>
+          <line x1="1.6" y1="12" x2="3.8" y2="12"></line><line x1="20.2" y1="12" x2="22.4" y2="12"></line>
+          <line x1="4.6" y1="4.6" x2="6.2" y2="6.2"></line><line x1="17.8" y1="17.8" x2="19.4" y2="19.4"></line>
+          <line x1="4.6" y1="19.4" x2="6.2" y2="17.8"></line><line x1="17.8" y1="6.2" x2="19.4" y2="4.6"></line>
+        </g>
+      </svg>
+        </button>
       </div>
     </div>
   </nav>
 
   <main class="content-shell models-dashboard">
-    <header class="content-hero">
-      <h1 class="content-title" data-i18n="h1">Model Catalog</h1>
-    </header>
-
     <section class="surface-panel content-card data-table-card">
       <header class="content-card-header">
         <h2 class="content-card-title" data-i18n="h2">All models</h2>
@@ -51,13 +58,73 @@
         <div class="action-bar models-action-bar">
           <label class="action-bar-field">
             <span class="field-label" data-i18n="filterName">Filter by name</span>
-            <input class="text-control" id="name-filter" type="search" autocomplete="off" spellcheck="false">
+            <input class="text-control" id="name-filter" type="search" placeholder="Search model name, ID or provider…" autocomplete="off" spellcheck="false">
+          </label>
+          <div class="action-bar-field">
+            <span class="field-label" id="provider-label" data-i18n="filterProvider">Filter by provider</span>
+            <details class="provider-filter" id="provider-filter">
+              <summary class="select-control" aria-labelledby="provider-label provider-summary"><span id="provider-summary">All providers</span></summary>
+              <div class="provider-options" role="group" aria-labelledby="provider-label"></div>
+            </details>
+          </div>
+          <div class="action-bar-field">
+            <span class="field-label" id="context-label" data-i18n="filterContext">Context size</span>
+            <details class="context-filter" id="context-filter">
+              <summary class="select-control" aria-labelledby="context-label context-summary"><span id="context-summary">Any</span></summary>
+              <div class="context-options">
+                <label><input type="checkbox" value="0:32000"> &lt; 32K</label>
+                <label><input type="checkbox" value="32000:64000"> 32K ≤ x &lt; 64K</label>
+                <label><input type="checkbox" value="64000:128000"> 64K ≤ x &lt; 128K</label>
+                <label><input type="checkbox" value="128000:200000"> 128K ≤ x &lt; 200K</label>
+                <label><input type="checkbox" value="200000:1000000"> 200K ≤ x &lt; 1M</label>
+                <label><input type="checkbox" value="1000000:Infinity"> ≥ 1M</label>
+                <label><input type="checkbox" value="unknown"> <span data-i18n="contextUnknown">Unknown</span></label>
+              </div>
+            </details>
+          </div>
+          <label class="action-bar-field">
+            <span class="field-label" data-i18n="priceCurrency">Price currency</span>
+            <select class="select-control" id="currency-select">
+              <option value="USD" data-i18n="currencyUSD">USD — US dollar</option>
+              <option value="CNY" data-i18n="currencyCNY">CNY — Chinese yuan</option>
+              <option value="HKD" data-i18n="currencyHKD">HKD — Hong Kong dollar</option>
+              <option value="EUR" data-i18n="currencyEUR">EUR — Euro</option>
+              <option value="JPY" data-i18n="currencyJPY">JPY — Japanese yen</option>
+              <option value="KRW" data-i18n="currencyKRW">KRW — South Korean won</option>
+            </select>
           </label>
           <label class="action-bar-field">
-            <span class="field-label" data-i18n="filterProvider">Filter by provider</span>
-            <select class="select-control" id="provider-filter"></select>
+            <span class="field-label" data-i18n="filterSota" data-i18n-title="sotaHelp">SOTA</span>
+            <select class="select-control" id="sota-filter">
+              <option value="all" data-i18n="sotaAll">All</option>
+              <option value="yes" data-i18n="sotaYes">SOTA only</option>
+              <option value="no" data-i18n="sotaNo">Unmarked</option>
+            </select>
+          </label>
+          <label class="action-bar-field">
+            <span class="field-label" data-i18n="filterOpen" data-i18n-title="openHelp"></span>
+            <select class="select-control" id="open-weights-filter">
+              <option value="all" data-i18n="sotaAll">All</option>
+              <option value="yes" data-i18n="traitYes">Yes</option>
+              <option value="no" data-i18n="traitNo">No</option>
+              <option value="unknown" data-i18n="contextUnknown">Unknown</option>
+            </select>
+          </label>
+          <label class="action-bar-field">
+            <span class="field-label" data-i18n="filterChina" data-i18n-title="chinaHelp"></span>
+            <select class="select-control" id="china-filter">
+              <option value="all" data-i18n="sotaAll">All</option>
+              <option value="yes" data-i18n="traitYes">Yes</option>
+              <option value="no" data-i18n="traitNo">No</option>
+              <option value="unknown" data-i18n="contextUnknown">Unknown</option>
+            </select>
           </label>
           <button class="text-control reset-button" id="reset-filters" type="button" data-i18n="reset">[ Reset ]</button>
+        </div>
+
+        <div class="exchange-info">
+          <span id="exchange-status" role="status" aria-live="polite" hidden></span>
+          <button class="text-control exchange-refresh" id="refresh-rate" type="button" data-i18n="refreshRate" hidden>Refresh rate</button>
         </div>
 
         <div class="data-table-wrap models-catalog-table-wrap">
@@ -67,10 +134,10 @@
               <tr>
                 <th scope="col" data-i18n="thModel">Model</th>
                 <th scope="col" class="data-table-col-num" data-i18n="thContext">Context</th>
-                <th scope="col" class="data-table-col-num" data-i18n="thInput">Input&nbsp;$/M</th>
-                <th scope="col" class="data-table-col-num" data-i18n="thOutput">Output&nbsp;$/M</th>
-                <th scope="col" class="data-table-col-num" data-i18n="thCacheRead">Cache&nbsp;read&nbsp;$/M</th>
-                <th scope="col" class="data-table-col-num" data-i18n="thCacheWrite">Cache&nbsp;write&nbsp;$/M</th>
+                <th scope="col" class="data-table-col-num" aria-sort="none"><button class="price-sort" type="button" data-sort="in"><span data-i18n="thInput">Input&nbsp;$/M</span> <span class="sort-indicator" aria-hidden="true">↕</span></button></th>
+                <th scope="col" class="data-table-col-num" aria-sort="none"><button class="price-sort" type="button" data-sort="out"><span data-i18n="thOutput">Output&nbsp;$/M</span> <span class="sort-indicator" aria-hidden="true">↕</span></button></th>
+                <th scope="col" class="data-table-col-num" aria-sort="none"><button class="price-sort" type="button" data-sort="cr"><span data-i18n="thCacheRead">Cache read&nbsp;$/M</span> <span class="sort-indicator" aria-hidden="true">↕</span></button></th>
+                <th scope="col" class="data-table-col-num" aria-sort="none"><button class="price-sort" type="button" data-sort="cw"><span data-i18n="thCacheWrite">Cache write&nbsp;$/M</span> <span class="sort-indicator" aria-hidden="true">↕</span></button></th>
               </tr>
             </thead>
             <tbody id="models-tbody"></tbody>
@@ -79,6 +146,23 @@
       </div>
     </section>
   </main>
+
+  <footer class="site-footer">
+      <div class="footer-info">
+        <span>© 2026 wangruofeng</span>
+        <a href="https://wangruofeng.com/" target="_blank" rel="noopener noreferrer" data-i18n="footerBlog">Blog</a>
+        <a href="https://x.com/oneruofeng" target="_blank" rel="noopener noreferrer">X</a>
+        <span class="footer-source">
+        <span data-i18n="footerSource">Data primarily sourced from</span>
+      <a class="sticky-nav-logo" href="https://pi.dev/models" aria-label="Pi model catalog" data-i18n-aria="navHome">
+        <svg class="pi-logo-mark" viewBox="0 0 44 44" width="44" height="44" role="img" aria-hidden="true">
+          <rect x="1" y="1" width="42" height="42" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="22" y="31" font-family="Georgia, 'Times New Roman', serif" font-size="28" text-anchor="middle" fill="currentColor">&#960;</text>
+        </svg>
+      </a>
+        </span>
+      </div>
+  </footer>
 
   <script src="app.js"></script>
 </body>

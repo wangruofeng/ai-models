@@ -1,0 +1,161 @@
+{
+  "amazon-web-services": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/amazon-web-services/light.svg"
+  },
+  "antgroup": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/antgroup/color.svg"
+  },
+  "anthropic": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/anthropic/light.svg"
+  },
+  "microsoft-azure": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/microsoft-azure/default.svg"
+  },
+  "baseten": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/baseten/default.svg"
+  },
+  "cerebras": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/cerebras/color.svg"
+  },
+  "cloudflare": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/cloudflare/color.svg"
+  },
+  "deepseek": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/deepseek/color.svg"
+  },
+  "fireworks": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/fireworks/color.svg"
+  },
+  "github-copilot": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/github-copilot/light.svg"
+  },
+  "google": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/google/color.svg"
+  },
+  "groq": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/groq/default.svg"
+  },
+  "huggingface": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/huggingface/color.svg"
+  },
+  "kimi": {
+    "source": "https://thesvg.org/icon/kimi",
+    "download": "https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/kimi/default.svg"
+  },
+  "meta": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/meta/color.svg"
+  },
+  "minimax": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/minimax/default.svg"
+  },
+  "mistral": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/mistral/color.svg"
+  },
+  "moonshot": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/moonshot/default.svg"
+  },
+  "nvidia": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/nvidia/light.svg"
+  },
+  "openai": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/openai/light.svg"
+  },
+  "opencode": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/opencode/default.svg"
+  },
+  "openrouter": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/openrouter/light.svg"
+  },
+  "qwen": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/qwen/light.svg"
+  },
+  "together-ai": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/together-ai/light.svg"
+  },
+  "vercel": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/vercel/light.svg"
+  },
+  "xai": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/xai/default.svg"
+  },
+  "xiaomi": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/xiaomi/default.svg"
+  },
+  "zhipu": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/zhipu/color.svg"
+  },
+  "claude": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/claude/color.svg"
+  },
+  "gemini": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/gemini/default.svg"
+  },
+  "gemma-google": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/gemma-google/color.svg"
+  },
+  "bytedance": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/bytedance/color.svg"
+  },
+  "tencent": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/tencent/color.svg"
+  },
+  "stepfun": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/stepfun/color.svg"
+  },
+  "longcat": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/longcat/color.svg"
+  },
+  "cohere": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/cohere/color.svg"
+  },
+  "ai21labs-jamba": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/ai21labs-jamba/default.svg"
+  },
+  "perplexity": {
+    "source": "https://thesvg.org/collection/brands",
+    "download": "https://raw.githubusercontent.com/glincker/thesvg/main/public/icons/perplexity/color.svg"
+  },
+  "radius": {
+    "source": "https://radius.earendil.com/",
+    "download": "https://radius.earendil.com/assets/radius/favicon.svg"
+  },
+  "model": {
+    "source": "项目自绘：中性模型占位图标"
+  }
+}

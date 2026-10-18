@@ -1,0 +1,12 @@
+{
+  "name": "ai-models",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI 模型目录与价格比较",
+  "scripts": {
+    "dev": "browser-sync start --config bs-config.cjs"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4"
+  }
+}
