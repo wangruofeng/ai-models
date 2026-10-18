@@ -76,6 +76,33 @@
       renderPreview();
     });
   });
+  document.querySelectorAll('.faq-section details').forEach(function (details) {
+    var summary = details.querySelector('summary');
+    var animation = null;
+    var expanded = details.open;
+    summary.addEventListener('click', function (event) {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      event.preventDefault();
+      var startHeight = details.getBoundingClientRect().height;
+      expanded = animation ? !expanded : !details.open;
+      if (animation) animation.cancel();
+      details.open = true;
+      details.style.overflow = 'hidden';
+      var style = getComputedStyle(details);
+      var endHeight = expanded ? details.getBoundingClientRect().height :
+        summary.getBoundingClientRect().height + parseFloat(style.paddingTop) +
+        parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+      animation = details.animate([
+        { height: startHeight + 'px' },
+        { height: endHeight + 'px' }
+      ], { duration: 240, easing: 'ease-in-out' });
+      animation.onfinish = function () {
+        details.open = expanded;
+        details.style.overflow = '';
+        animation = null;
+      };
+    });
+  });
   applyLanguage();
   fetch('data.json').then(function (response) { if (!response.ok) throw Error('HTTP ' + response.status); return response.json(); }).then(function (data) {
     models = data.models;
