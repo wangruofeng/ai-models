@@ -7,6 +7,22 @@
     ['localhost', '127.0.0.1', '[::1]'].indexOf(window.location.hostname) !== -1
   );
 
+  /* ---------- 回到顶部 ---------- */
+
+  var backToTop = document.getElementById('back-to-top');
+  if (backToTop) {
+    var syncBackToTop = function () {
+      backToTop.classList.toggle('is-visible', window.pageYOffset > 400);
+    };
+    window.addEventListener('scroll', syncBackToTop, { passive: true });
+    window.addEventListener('resize', syncBackToTop);
+    syncBackToTop();
+    backToTop.addEventListener('click', function () {
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  }
+
   var ORIGIN = 'https://pi.dev';
   var state = { query: '', provider: 'all', contextRanges: [], sota: 'all', openWeights: 'all', china: 'all' };
   var FILTER_CACHE_KEY = 'pi-model-filters';
@@ -92,7 +108,8 @@
       themeLight: 'Switch to light theme',
       themeDark: 'Switch to dark theme',
       langTitle: 'Switch language',
-      langLabel: '中文'
+      langLabel: '中文',
+      backToTop: 'Back to top'
     },
     'zh-CN': {
       title: '模型目录 · Pi',
@@ -159,7 +176,8 @@
       themeLight: '切换为浅色主题',
       themeDark: '切换为深色主题',
       langTitle: '切换语言',
-      langLabel: 'EN'
+      langLabel: 'EN',
+      backToTop: '回到顶部'
     }
   };
 
