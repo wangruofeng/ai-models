@@ -181,8 +181,9 @@
         var d = items[j];
         html += '<tr><th scope="row" class="models-model-col">' +
           '<a href="' + escapeHtml(d.source || (ORIGIN + '/models/' + encodeURIComponent(d.p) + '/' + encodeURIComponent(d.id))) + '">' + escapeHtml(d.n) + '</a>' +
+          (d.description ? '<span class="model-info" tabindex="0" role="img" aria-label="' + escapeHtml(d.description) + '">ⓘ<span class="model-info-tooltip" aria-hidden="true">' + escapeHtml(d.description) + '</span></span>' : '') +
           '<code>' + escapeHtml(d.id) + '</code>' +
-          (d.description ? '<small>' + escapeHtml(d.description) + '</small>' : '') + '</th>' +
+          '</th>' +
           '<td class="data-table-col-num">' + formatContext(d.ctx) + '</td>' +
           '<td class="data-table-col-num">' + (d.imagePricing ? t('imageText') + ' ' + formatPrice(d.in) + '<br>' + t('imageImage') + ' ' + formatPrice(d.imagePricing.input) : formatPrice(d.in)) + '</td>' +
           '<td class="data-table-col-num">' + (d.imagePricing ? t('imageImage') + ' ' : '') + formatPrice(d.out) + '</td>' +

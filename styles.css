@@ -409,3 +409,38 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+/* 模型说明：悬停或键盘聚焦信息图标时显示。 */
+.model-info {
+  position: relative;
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--text-3);
+  cursor: help;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.model-info-tooltip {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 2;
+  width: 240px;
+  max-width: 60vw;
+  padding: 8px 10px;
+  border: 1px solid var(--border-input);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  white-space: normal;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.model-info:hover .model-info-tooltip,
+.model-info:focus .model-info-tooltip {
+  display: block;
+}
