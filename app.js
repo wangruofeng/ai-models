@@ -24,8 +24,11 @@
   }
 
   var ORIGIN = 'https://pi.dev';
-  var state = { query: '', provider: 'all', contextRanges: [], sota: 'all', openWeights: 'all', china: 'all' };
+  var state = { query: '', providers: [], contextRanges: [], sota: 'all', openWeights: 'all', china: 'all' };
   var FILTER_CACHE_KEY = 'pi-model-filters';
+  var pkModels = [];
+  var pkMode = false;
+  var pkMobile = window.matchMedia('(max-width: 768px)');
   var FAVORITES_CACHE_KEY = 'pi-favorite-providers';
   var favoriteProviders = [];
   var data = null;
@@ -55,6 +58,15 @@
       caption: 'All models',
       filterName: 'Filter by name',
       filterPlaceholder: 'Search model name, ID or provider…',
+      pkTitle: 'Model PK',
+      pkSelect: 'Select for PK',
+      pkStart: 'View comparison',
+      pkEnter: 'Start PK',
+      pkExit: 'Exit PK',
+      pkClear: 'Clear',
+      pkClose: 'Close',
+      pkRemove: 'Remove',
+      pkSelected: function (n) { return n + ' selected'; },
       filterProvider: 'Filter by provider',
       favoriteProvider: 'Favorite provider',
       unfavoriteProvider: 'Remove favorite',
@@ -123,6 +135,15 @@
       caption: '全部模型',
       filterName: '按名称筛选',
       filterPlaceholder: '输入模型名称、ID 或提供商…',
+      pkTitle: '模型 PK',
+      pkSelect: '加入 PK',
+      pkStart: '查看对比',
+      pkEnter: '开始 PK',
+      pkExit: '退出 PK',
+      pkClear: '清空',
+      pkClose: '关闭',
+      pkRemove: '移除',
+      pkSelected: function (n) { return '已选 ' + n + ' 个模型'; },
       filterProvider: '按提供商筛选',
       favoriteProvider: '收藏厂商',
       unfavoriteProvider: '取消收藏',
@@ -277,11 +298,13 @@
     return String(v);
   }
 
-  function formatPrice(v) {
+  function formatPrice(v, digits) {
+    if (digits == null) digits = 1;
     if (v == null) return '—';
     if (typeof v !== 'number') return escapeHtml(v);
-    if (currency === 'USD' || !exchange) return '$' + v.toFixed(1);
-    return CURRENCY_SYMBOLS[currency] + (v * exchange.rates[currency]).toFixed(1);
+    if (currency === 'USD' || !exchange) return '$' + (digits === 4 ? Number(v.toFixed(digits)) : v.toFixed(digits));
+    var price = (v * exchange.rates[currency]).toFixed(digits);
+    return CURRENCY_SYMBOLS[currency] + (digits === 4 ? Number(price) : price);
   }
 
   /* ---------- 汇率：美元原价保持不变，仅在展示时换算 ---------- */
@@ -425,7 +448,7 @@
   function filteredModels() {
     var q = state.query.trim().toLowerCase();
     return data.models.filter(function (m) {
-      if (state.provider !== 'all' && m.p !== state.provider) return false;
+      if (state.providers.length && state.providers.indexOf(m.p) === -1) return false;
       if (['openWeights', 'china'].some(function (key) {
         var value = m.traits && m.traits[key];
         if (state[key] === 'all') return false;
@@ -469,6 +492,7 @@
       for (var j = 0; j < items.length; j++) {
         var d = items[j];
         html += '<tr><th scope="row" class="models-model-col">' +
+          '<label class="pk-select"><input type="checkbox" data-pk-index="' + data.models.indexOf(d) + '"' + (pkModels.indexOf(d) !== -1 ? ' checked' : '') + ' aria-label="' + escapeHtml(t('pkSelect') + ' · ' + d.p + ' / ' + d.n) + '"><span>PK</span></label>' +
           '<a href="' + escapeHtml(d.source || (ORIGIN + '/models/' + encodeURIComponent(d.p) + '/' + encodeURIComponent(d.id))) + '">' + escapeHtml(d.n) + '</a>' + brandIcon(modelBrand(d)) +
           (d.sota ? ' <a class="sota-badge" href="' + escapeHtml(d.sota.source) + '" target="_blank" rel="noopener noreferrer" title="' + escapeHtml(t('sotaDetail')(d.sota.categories.map(function (key) { return t('sotaCategories')[key]; }).join(' / '), d.sota.verifiedAt)) + '">SOTA</a>' : '') +
           (d.traits && d.traits.openWeights === true ? ' <span class="trait-badge" title="' + escapeHtml(t('openHelp')) + '">' + t('badgeOpen') + '</span>' : '') +
@@ -479,8 +503,8 @@
           '<td class="data-table-col-num">' + formatContext(d.ctx) + '</td>' +
           '<td class="data-table-col-num">' + (d.imagePricing ? t('imageText') + ' ' + formatPrice(d.in) + '<br>' + t('imageImage') + ' ' + formatPrice(d.imagePricing.input) : formatPrice(d.in)) + '</td>' +
           '<td class="data-table-col-num">' + (d.imagePricing ? t('imageImage') + ' ' : '') + formatPrice(d.out) + '</td>' +
-          '<td class="data-table-col-num">' + (d.imagePricing ? t('imageText') + ' ' + formatPrice(d.cr) + '<br>' + t('imageImage') + ' ' + formatPrice(d.imagePricing.cachedInput) : formatPrice(d.cr)) + '</td>' +
-          '<td class="data-table-col-num">' + formatPrice(d.cw) + '</td></tr>';
+          '<td class="data-table-col-num">' + (d.imagePricing ? t('imageText') + ' ' + formatPrice(d.cr, 4) + '<br>' + t('imageImage') + ' ' + formatPrice(d.imagePricing.cachedInput, 4) : formatPrice(d.cr, 4)) + '</td>' +
+          '<td class="data-table-col-num">' + formatPrice(d.cw, 4) + '</td></tr>';
       }
     });
 
@@ -490,13 +514,86 @@
 
     els.tbody.innerHTML = html;
     els.count.textContent = t('modelCountSummary')(models.length, data.models.length);
+    renderPK();
+  }
+
+  /* 横向滚动容器会阻止 CSS sticky 跟随页面，按页面滚动同步表头位置。 */
+  var catalogTable = document.querySelector('.models-catalog-table');
+  var catalogHead = catalogTable.tHead;
+  var headerFrame = null;
+
+  function pinCatalogHeader() {
+    headerFrame = null;
+    var bounds = catalogTable.getBoundingClientRect();
+    var offset = Math.max(0, Math.min(-bounds.top, bounds.height - catalogHead.offsetHeight));
+    catalogHead.style.transform = 'translateY(' + offset + 'px)';
+  }
+
+  function scheduleCatalogHeader() {
+    if (headerFrame == null) headerFrame = requestAnimationFrame(pinCatalogHeader);
+  }
+
+  window.addEventListener('scroll', scheduleCatalogHeader, { passive: true });
+  window.addEventListener('resize', scheduleCatalogHeader);
+  new ResizeObserver(scheduleCatalogHeader).observe(catalogTable);
+
+  /* ---------- 模型 PK ---------- */
+
+  function renderPK() {
+    document.getElementById('pk-bar').hidden = !pkMode;
+    document.body.classList.toggle('pk-mode', pkMode);
+    var toggle = document.getElementById('pk-toggle');
+    toggle.textContent = t(pkMode ? 'pkExit' : 'pkEnter');
+    toggle.setAttribute('aria-pressed', String(pkMode));
+    document.body.classList.toggle('has-pk', pkMode);
+    document.getElementById('pk-count').textContent = t('pkSelected')(pkModels.length);
+    document.getElementById('pk-start').disabled = pkModels.length < 2;
+    document.getElementById('pk-selected').innerHTML = pkModels.map(function (model, index) {
+      return '<button class="text-control pk-chip" type="button" data-pk-remove="' + index + '" aria-label="' + escapeHtml(t('pkRemove') + ' · ' + model.p + ' / ' + model.n) + '">' + escapeHtml(model.p + ' / ' + model.n) + ' ×</button>';
+    }).join('');
+    if (document.getElementById('pk-dialog').open) renderPKTable();
+  }
+
+  function renderPKTable() {
+    function priceLabel(key) {
+      return t(key).replace('$/M', currency !== 'USD' && exchange ? CURRENCY_SYMBOLS[currency] + '/M' : '$/M');
+    }
+    function price(model, key) {
+      var digits = key === 'cr' || key === 'cw' ? 4 : undefined;
+      if (model.imagePricing && (key === 'in' || key === 'cr')) {
+        return t('imageText') + ' ' + formatPrice(model[key], digits) + '<br>' +
+          t('imageImage') + ' ' + formatPrice(model.imagePricing[key === 'in' ? 'input' : 'cachedInput'], digits);
+      }
+      return (model.imagePricing && key === 'out' ? t('imageImage') + ' ' : '') + formatPrice(model[key], digits);
+    }
+    function trait(model, key) {
+      var value = model.traits && model.traits[key];
+      return t(value === true ? 'traitYes' : value === false ? 'traitNo' : 'contextUnknown');
+    }
+    var rows = [
+      [t('filterProvider'), function (m) { return escapeHtml(m.p); }],
+      ['Model ID', function (m) { return '<code>' + escapeHtml(m.id) + '</code>'; }],
+      [t('thContext'), function (m) { return formatContext(m.ctx); }],
+      [priceLabel('thInput'), function (m) { return price(m, 'in'); }],
+      [priceLabel('thOutput'), function (m) { return price(m, 'out'); }],
+      [priceLabel('thCacheRead'), function (m) { return price(m, 'cr'); }],
+      [priceLabel('thCacheWrite'), function (m) { return price(m, 'cw'); }],
+      ['SOTA', function (m) { return m.sota ? escapeHtml(m.sota.categories.map(function (key) { return t('sotaCategories')[key]; }).join(' / ')) : t('sotaNo'); }],
+      [t('filterOpen'), function (m) { return trait(m, 'openWeights'); }],
+      [t('filterChina'), function (m) { return trait(m, 'china'); }]
+    ];
+    document.getElementById('pk-table').innerHTML = '<caption class="visually-hidden">' + t('pkTitle') + '</caption><thead><tr><th scope="col">' + t('thModel') + '</th>' + pkModels.map(function (m, index) {
+      return '<th scope="col">' + escapeHtml(m.n) + '<br><button class="text-control" type="button" data-pk-remove="' + index + '" aria-label="' + escapeHtml(t('pkRemove') + ' · ' + m.p + ' / ' + m.n) + '">' + t('pkRemove') + '</button></th>';
+    }).join('') + '</tr></thead><tbody>' + rows.map(function (row) {
+      return '<tr><th scope="row">' + escapeHtml(row[0]) + '</th>' + pkModels.map(function (m) { return '<td>' + row[1](m) + '</td>'; }).join('') + '</tr>';
+    }).join('') + '</tbody>';
   }
 
   /* ---------- 本地筛选记录 ---------- */
 
   function saveFilters() {
     try {
-      var defaults = !state.query && state.provider === 'all' && !state.contextRanges.length &&
+      var defaults = !state.query && !state.providers.length && !state.contextRanges.length &&
         state.sota === 'all' && state.openWeights === 'all' && state.china === 'all' &&
         currency === 'USD' && priceSort.direction === 'none';
       if (defaults) localStorage.removeItem(FILTER_CACHE_KEY);
@@ -510,7 +607,8 @@
       if (!saved || !saved.state) return;
       var prior = saved.state;
       if (typeof prior.query === 'string') state.query = prior.query;
-      if (prior.provider === 'all' || data.providers.some(function (provider) { return provider.name === prior.provider; })) state.provider = prior.provider;
+      var providers = Array.isArray(prior.providers) ? prior.providers : [prior.provider];
+      state.providers = data.providers.map(function (provider) { return provider.name; }).filter(function (name) { return providers.indexOf(name) !== -1; });
       ['sota', 'openWeights', 'china'].forEach(function (key) {
         var select = els[key + 'Filter'];
         if (Array.from(select.options).some(function (option) { return option.value === prior[key]; })) state[key] = prior[key];
@@ -541,17 +639,56 @@
 
   function syncUrl() {
     var url = new URL(window.location.href);
-    if (state.provider === 'all') {
-      url.searchParams.delete('provider');
-    } else {
-      url.searchParams.set('provider', state.provider);
-    }
+    url.searchParams.delete('provider');
+    state.providers.forEach(function (provider) { url.searchParams.append('provider', provider); });
     window.history.replaceState(null, '', url);
   }
 
   /* ---------- 事件 ---------- */
 
   function bindEvents() {
+    var pkDialog = document.getElementById('pk-dialog');
+    function exitPK() {
+      pkMode = false;
+      pkModels = [];
+      if (pkDialog.open) pkDialog.close();
+      render();
+    }
+    document.getElementById('pk-toggle').addEventListener('click', function () {
+      if (pkMobile.matches) return;
+      if (pkMode) exitPK();
+      else { pkMode = true; renderPK(); }
+    });
+    pkMobile.addEventListener('change', function (event) {
+      if (event.matches) exitPK();
+    });
+    document.getElementById('pk-start').addEventListener('click', function () {
+      if (!pkMode || pkMobile.matches || pkModels.length < 2) return;
+      renderPKTable();
+      pkDialog.showModal();
+    });
+    document.getElementById('pk-close').addEventListener('click', function () { pkDialog.close(); });
+    document.getElementById('pk-clear').addEventListener('click', function () {
+      pkModels = [];
+      render();
+    });
+    els.tbody.addEventListener('change', function (event) {
+      var input = event.target.closest('[data-pk-index]');
+      if (!input || !pkMode || pkMobile.matches) return;
+      var model = data.models[Number(input.dataset.pkIndex)];
+      if (input.checked) pkModels.push(model);
+      else pkModels.splice(pkModels.indexOf(model), 1);
+      renderPK();
+    });
+    [document.getElementById('pk-selected'), pkDialog].forEach(function (container) {
+      container.addEventListener('click', function (event) {
+        var button = event.target.closest('[data-pk-remove]');
+        if (!button) return;
+        pkModels.splice(Number(button.dataset.pkRemove), 1);
+        if (pkDialog.open && pkModels.length < 2) pkDialog.close();
+        render();
+      });
+    });
     document.querySelectorAll('[data-sort]').forEach(function (button) {
       button.addEventListener('click', function () {
         var key = button.dataset.sort;
@@ -591,16 +728,15 @@
       }).focus();
     });
 
-    els.providerFilter.addEventListener('change', function () {
-      state.provider = els.providerFilter.querySelector('input:checked').value;
-      els.providerFilter.open = false;
-      els.providerFilter.querySelector('summary').focus();
+    els.providerFilter.addEventListener('change', function (event) {
+      state.providers = event.target.value === 'all' ? [] :
+        Array.from(els.providerFilter.querySelectorAll('input:checked'), function (input) { return input.value; }).filter(function (value) { return value !== 'all'; });
       syncUrl();
       render();
     });
 
     els.reset.addEventListener('click', function () {
-      state = { query: '', provider: 'all', contextRanges: [], sota: 'all', openWeights: 'all', china: 'all' };
+      state = { query: '', providers: [], contextRanges: [], sota: 'all', openWeights: 'all', china: 'all' };
       priceSort = { key: null, direction: 'none' };
       currency = 'USD';
       els.currencySelect.value = currency;
@@ -655,7 +791,7 @@
       if (!link) return;
       e.preventDefault();
       var provider = new URL(link.href, window.location.href).searchParams.get('provider');
-      state.provider = provider;
+      state.providers = [provider];
       syncUrl();
       render();
     });
@@ -676,20 +812,25 @@
   }
 
   function updateProviderSummary() {
-    document.getElementById('provider-summary').innerHTML = state.provider === 'all' ? escapeHtml(t('allProviders')) :
-      brandIcon(PROVIDER_BRANDS[state.provider]) + '<span>' + escapeHtml(state.provider) + '</span>';
-    els.providerFilter.querySelectorAll('input').forEach(function (input) { input.checked = input.value === state.provider; });
+    var summary = document.getElementById('provider-summary');
+    summary.innerHTML = !state.providers.length ? escapeHtml(t('allProviders')) :
+      (state.providers.length === 1 ? brandIcon(PROVIDER_BRANDS[state.providers[0]]) : '') +
+      '<span>' + escapeHtml(state.providers.join(', ')) + '</span>';
+    summary.title = state.providers.join(', ');
+    els.providerFilter.querySelectorAll('input').forEach(function (input) {
+      input.checked = input.value === 'all' ? !state.providers.length : state.providers.indexOf(input.value) !== -1;
+    });
   }
 
   function buildProviderSelect() {
-    var options = '<label><input type="radio" name="provider" value="all" checked><span data-i18n="allProviders">' + escapeHtml(t('allProviders')) + '</span></label>';
+    var options = '<label><input type="checkbox" name="provider" value="all" checked><span data-i18n="allProviders">' + escapeHtml(t('allProviders')) + '</span></label>';
     var providers = data.providers.slice().sort(function (a, b) {
       return Number(favoriteProviders.indexOf(b.name) !== -1) - Number(favoriteProviders.indexOf(a.name) !== -1);
     });
     providers.forEach(function (provider) {
       var favorite = favoriteProviders.indexOf(provider.name) !== -1;
       var favoriteLabel = t(favorite ? 'unfavoriteProvider' : 'favoriteProvider') + ' · ' + provider.name;
-      options += '<div class="provider-option"><label title="' + escapeHtml(provider.name) + '"><input type="radio" name="provider" value="' + escapeHtml(provider.name) + '">' +
+      options += '<div class="provider-option"><label title="' + escapeHtml(provider.name) + '"><input type="checkbox" name="provider" value="' + escapeHtml(provider.name) + '">' +
         brandIcon(PROVIDER_BRANDS[provider.name]) + '<span>' + escapeHtml(provider.name) + '</span></label>' +
         '<button class="provider-favorite" type="button" data-favorite-provider="' + escapeHtml(provider.name) + '" aria-pressed="' + favorite + '" aria-label="' + escapeHtml(favoriteLabel) + '" title="' + escapeHtml(favoriteLabel) + '">' +
         '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.5 6.3-.9Z"/></svg></button></div>';
@@ -705,9 +846,10 @@
   }
 
   function readUrlState() {
-    var provider = new URL(window.location.href).searchParams.get('provider');
-    if (provider && data.providers.some(function (p) { return p.name === provider; })) {
-      state.provider = provider;
+    var params = new URL(window.location.href).searchParams;
+    if (params.has('provider')) {
+      var providers = params.getAll('provider');
+      state.providers = data.providers.map(function (provider) { return provider.name; }).filter(function (name) { return providers.indexOf(name) !== -1; });
     }
   }
 

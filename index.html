@@ -52,7 +52,7 @@
     <section class="surface-panel content-card data-table-card">
       <header class="content-card-header">
         <h2 class="content-card-title" data-i18n="h2">All models</h2>
-        <div class="content-card-actions"><span id="model-count" aria-live="polite">&hellip;</span></div>
+        <div class="content-card-actions"><button class="text-control" id="pk-toggle" type="button" aria-pressed="false" data-i18n="pkEnter">Start PK</button><span id="model-count" aria-live="polite">&hellip;</span></div>
       </header>
       <div class="content-card-body">
         <div class="action-bar models-action-bar">
@@ -146,6 +146,22 @@
       </div>
     </section>
   </main>
+
+  <aside class="pk-bar" id="pk-bar" aria-label="Model PK" hidden>
+    <span id="pk-count" role="status" aria-live="polite"></span>
+    <div class="pk-selected" id="pk-selected"></div>
+    <button class="text-control" id="pk-clear" type="button" data-i18n="pkClear">Clear</button>
+    <button class="text-control" id="pk-start" type="button" data-i18n="pkStart" disabled>Compare</button>
+  </aside>
+  <dialog class="pk-dialog" id="pk-dialog" aria-labelledby="pk-title">
+    <div class="pk-header">
+      <h2 id="pk-title" data-i18n="pkTitle">Model PK</h2>
+      <button class="text-control" id="pk-close" type="button" data-i18n="pkClose">Close</button>
+    </div>
+    <div class="data-table-wrap pk-table-wrap" tabindex="0" role="region" aria-labelledby="pk-title">
+      <table class="data-table pk-table" id="pk-table"></table>
+    </div>
+  </dialog>
 
   <footer class="site-footer">
       <div class="footer-info">
