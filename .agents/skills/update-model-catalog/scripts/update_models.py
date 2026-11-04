@@ -7,12 +7,20 @@ from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
+import sys
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
 URL = 'https://pi.dev/models'
 ROOT = Path(__file__).resolve().parents[4]
 FIELDS = ['context', 'input', 'output', 'cacheRead', 'cacheWrite']
+
+# 人工核对的字段覆盖：源站把缓存写入价标为 0，实际是未披露，须保持 null（2026-10-21 人工核实）。
+# 条目被源站下架后此处会残留，同步时打印警告提醒清理。
+MANUAL_OVERRIDES = {
+    ('deepseek', 'deepseek-v4-pro'): {'cw': None},
+    ('deepseek', 'deepseek-flash'): {'cw': None},
+}
 
 
 class CatalogParser(HTMLParser):
@@ -120,6 +128,10 @@ def main():
         for field in ('sota', 'traits'):
             if field in prior:
                 model[field] = prior[field]
+        model.update(MANUAL_OVERRIDES.get((model['p'], model['id']), {}))
+    stale = MANUAL_OVERRIDES.keys() - source.keys()
+    if stale:
+        print(f'警告：人工覆盖的条目已不在源站，请清理 MANUAL_OVERRIDES：{sorted(stale)}', file=sys.stderr)
     supplements = [m for m in old['models'] if 'source' in m]
     for model in supplements:
         key = (model['p'], model['id'])
