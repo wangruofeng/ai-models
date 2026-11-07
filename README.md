@@ -6,7 +6,7 @@
 
 ## 数据
 
-最近同步：2026-11-07。pi.dev/models 源站共 1615 个模型，另保留 10 个官方补充条目，合计 1625 个模型、42 个 provider。
+最近同步：2026-11-08。pi.dev/models 源站共 1615 个模型，另保留 10 个官方补充条目，合计 1625 个模型、42 个 provider。
 
 - **1625 个模型**，来自 **42 个 provider**（amazon-bedrock、anthropic、openai、openrouter、vercel-ai-gateway、zai 等）
 - 每个模型包含：显示名、model ID、上下文窗口、输入/输出/缓存读写价格（$/M tokens）
