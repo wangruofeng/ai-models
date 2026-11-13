@@ -81,15 +81,25 @@ npm run dev
 - 模型名链接指向原站对应详情页（克隆站不含详情路由）
 - 未复刻：导航 logo 右键菜单（Copy/Download SVG、Press Kit）、移动端 burger 抽屉菜单
 
-## SOTA 标记（2026-10-18 核对）
+## SOTA 标记（2026-11-13 核对）
 
-本项目将 SOTA 用作「模型厂商在相应能力方向的当前旗舰」标记，依据官方发布与模型说明人工维护，不表示跨厂商榜单第一。聚合平台与区域入口仅继承已核实的同型号标记，不自动把每个平台最贵或版本号最大的型号标成旗舰；未标记可能表示未核实。
+本项目将 SOTA 用作「模型厂商在相应能力方向的当前旗舰」标记，依据官方发布与模型说明人工维护，并参考 [AIHOT 综合榜](https://aihot.news/leaderboard)及[科研榜](https://aihot.news/leaderboard/category/reasoning)交叉检查型号更替。它不表示跨厂商榜单第一，也不把所有上榜模型自动标为 SOTA；榜单评测覆盖和更新时间不同，旧型号仍可能留在榜上。未标记可能表示未核实、目录未收录当前旗舰，或入口映射尚不明确。
 
-`data.json` 中的 `sota` 对象包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 和官方 `source`。当前覆盖 39 个入口；Cerebras 与 Groq 现有目录未收录本次核实的旗舰型号，暂不强行标记。固定快照及明确的同型号批处理入口可一并标记；未核实的 Prime、Pro、Fast 等衍生型号不自动继承。
+`data.json` 中的 `sota` 对象包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 和官方 `source`。本次扫描全部 1659 条目录记录，最终标记 135 个模型入口，覆盖 39 个 provider；新增 80 个标记、移除 80 个旧标记、重新核对 55 个存量标记。逐型号依据及未覆盖情况见 [本次核对记录](docs/sota-review-2026-11-13.md)。模型数量、价格、上下文、开源与国产属性未随本次 SOTA 核对修改。
 
-主要依据：[OpenAI 模型目录](https://developers.openai.com/api/docs/models)、[GPT Image 2.5 指南](https://developers.openai.com/api/docs/guides/image-generation)、[Claude Fable](https://www.anthropic.com/claude/fable)、[Gemini 4 Argon](https://ai.google.dev/gemini-api/docs/latest-model)、[Grok 4.7](https://x.ai/news/grok-4-7)、[DeepSeek V4 Pro](https://api-docs.deepseek.com/news/news260813/)、[Kimi K3](https://www.kimi.com/en/blog/kimi-k3)、[MiniMax M3](https://www.minimax.io/models/text/m3)、[GLM 5.3](https://z.ai/blog/glm-5.3)、[Qwen 3.8 Max](https://qwen.ai/blog?id=qwen3.8)、[Mistral Large 4](https://mistral.ai/news/mistral-large-4/)、[Muse Wonder](https://research.meta.ai/blog/muse-wonder)、[MiMo V2.6 Pro](https://mimo.xiaomi.com/mimo-v2-6-material-research/)、[Ling／Ring 2.6](https://arxiv.org/abs/2606.15079)。逐条依据保存在模型的 `sota.source`。
+本轮主要更替：Claude Fable 5.2、Gemini 4 Carbon、Kimi K3.1 Pro、DeepSeek V4.1 Flash 1017、MiniMax M3.1 Flash、Ling 3.1 Flash 1019；保留 GPT-6 Astra、Grok 4.7、GLM-5.3、Muse Wonder、Mistral Large 4、MiMo V2.6 Pro，并补充已核实的同型号入口及腾讯 Hy4、Step 5 Preview、Inkling 2 Small、Reflection Beam、Command A+。
+
+Qwen4-Max-Preview 与 GPT Image 2.6 已有官方发布，但当前目录尚未收录，本次移除 Qwen3.8 Max 和 GPT Image 2.5 的旧旗舰标记，暂不扩充目录。因此当前没有图像 SOTA 入口，不表示没有图像旗舰模型。Cerebras 与 Groq 现有目录也未收录本轮已核实的旗舰型号。
+
+聚合平台与区域入口仅继承已核实的同型号标记。固定快照及明确的同型号批处理入口可一并标记；MiMo UltraSpeed 与 Kimi Highspeed 有官方同能力说明。未确认映射的 Prime、Pro、Fast、免费变体和动态 latest 路由不自动继承；未获独立证据的普通别名不自动等同最新日期快照。
 
 同步脚本按 `(provider, id)` 保留存量标记；源站删除型号时同时移除对应标记，新型号默认未标记。更新旗舰时需重新核实官方信息，并移除已被替代型号的 `sota` 对象；仅同步目录不会刷新核对日期或自动认定新旗舰。
+
+## 更新 SOTA 的项目级 Skill
+
+项目提供 [update-sota-models](.agents/skills/update-sota-models/SKILL.md)，支持参考 AIHOT 榜单和官方资料更新旗舰标记，并校验只有 SOTA 字段发生变化。
+
+下次可直接说：`使用 $update-sota-models 刷新所有模型的 SOTA 状态`。默认不提交、不推送、不部署。
 
 ## GPT 生图模型（2026-10-18 核对）
 
