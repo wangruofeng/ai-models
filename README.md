@@ -6,9 +6,9 @@
 
 ## 数据
 
-最近同步：2026-11-13。pi.dev/models 源站共 1649 个模型，另保留 10 个官方补充条目，合计 1659 个模型、42 个 provider。
+最近同步：2026-11-14。pi.dev/models 源站共 1661 个模型，另保留 10 个官方补充条目，合计 1671 个模型、42 个 provider。
 
-- **1659 个模型**，来自 **42 个 provider**（amazon-bedrock、anthropic、openai、openrouter、vercel-ai-gateway、zai 等）
+- **1671 个模型**，来自 **42 个 provider**（amazon-bedrock、anthropic、openai、openrouter、vercel-ai-gateway、zai 等）
 - 每个模型包含：显示名、model ID、上下文窗口、输入/输出/缓存读写价格（$/M tokens）
 - 数据提取自原站服务端渲染的 HTML 表格（`reference/pi-models-data.json` 为原始提取，`data.json` 为紧凑版）
 
@@ -54,7 +54,7 @@ npm run dev
 - **价格货币**：默认美元，可切换人民币、港币、欧元、日元、韩元；所有输入、输出、缓存及图片价格统一换算，原始美元数据保持不变
 - **汇率与缓存**：切换非美元货币时从 Frankfurter 一次查询最新 USD 对 CNY、HKD、EUR、JPY、KRW 的汇率（按日更新），显示汇率日期，并用 localStorage 缓存 1 小时；支持手动刷新，查询失败时标注使用旧缓存，无缓存时继续显示美元
 - **Reset**：一键清空全部筛选
-- **实时计数**：`N / 1659` 显示当前匹配数
+- **实时计数**：`N / 1671` 显示当前匹配数
 - **主题切换**：右上角太阳／月亮图标切换浅色与深色，localStorage 记忆；首次访问跟随系统主题
 - **分组表格**：按 provider 分组、行悬停高亮、数字右对齐、窄屏横向滚动
 
@@ -70,7 +70,7 @@ npm run dev
 ├── index.html      # 页面结构（导航 / 卡片 / 表格 / 页脚）
 ├── styles.css      # 设计 token + 组件样式（含暗色主题）
 ├── app.js          # 数据加载、筛选、渲染、主题切换
-├── data.json       # 1659 个模型的紧凑数据
+├── data.json       # 1671 个模型的紧凑数据
 └── reference/      # 提取过程中间产物（快照、DOM 样式、原始数据、截图）
 ```
 
@@ -85,7 +85,7 @@ npm run dev
 
 本项目将 SOTA 用作「模型厂商在相应能力方向的当前旗舰」标记，依据官方发布与模型说明人工维护，并参考 [AIHOT 综合榜](https://aihot.news/leaderboard)及[科研榜](https://aihot.news/leaderboard/category/reasoning)交叉检查型号更替。它不表示跨厂商榜单第一，也不把所有上榜模型自动标为 SOTA；榜单评测覆盖和更新时间不同，旧型号仍可能留在榜上。未标记可能表示未核实、目录未收录当前旗舰，或入口映射尚不明确。
 
-`data.json` 中的 `sota` 对象包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 和官方 `source`。本次扫描全部 1659 条目录记录，最终标记 135 个模型入口，覆盖 39 个 provider；新增 80 个标记、移除 80 个旧标记、重新核对 55 个存量标记。逐型号依据及未覆盖情况见 [本次核对记录](docs/sota-review-2026-11-13.md)。模型数量、价格、上下文、开源与国产属性未随本次 SOTA 核对修改。
+`data.json` 中的 `sota` 对象包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 和官方 `source`。本次扫描全部 1659 条目录记录，最终标记 1671 个模型入口，覆盖 42 个 provider；新增 80 个标记、移除 80 个旧标记、重新核对 55 个存量标记。逐型号依据及未覆盖情况见 [本次核对记录](docs/sota-review-2026-11-13.md)。模型数量、价格、上下文、开源与国产属性未随本次 SOTA 核对修改。
 
 本轮主要更替：Claude Fable 5.2、Gemini 4 Carbon、Kimi K3.1 Pro、DeepSeek V4.1 Flash 1017、MiniMax M3.1 Flash、Ling 3.1 Flash 1019；保留 GPT-6 Astra、Grok 4.7、GLM-5.3、Muse Wonder、Mistral Large 4、MiMo V2.6 Pro，并补充已核实的同型号入口及腾讯 Hy4、Step 5 Preview、Inkling 2 Small、Reflection Beam、Command A+。
 
