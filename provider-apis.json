@@ -1,0 +1,423 @@
+[
+  {
+    "id": "amazon-bedrock",
+    "name": "Amazon Bedrock",
+    "nameZh": "亚马逊云科技 Bedrock",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://bedrock-runtime.{region}.amazonaws.com/openai/v1", "source": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-chat-completions.html", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://bedrock-runtime.{region}.amazonaws.com/anthropic", "source": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-messages-api.html", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://bedrock-runtime.{region}.amazonaws.com/openai/v1", "source": "https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "ant-ling",
+    "name": "Ant Group Ling",
+    "nameZh": "蚂蚁集团 Ling",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.ant-ling.com/v1", "source": "https://developer.ant-ling.com/en/docs/api-reference/chat/openai", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.ant-ling.com/anthropic", "source": "https://developer.ant-ling.com/en/docs/integrations/claude-code/", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "endpoints": [
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.anthropic.com", "source": "https://platform.claude.com/docs/en/api/messages/create", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "azure",
+    "name": "Microsoft Azure OpenAI",
+    "nameZh": "微软 Azure OpenAI",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://{resource}.openai.azure.com/openai/v1", "source": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/api-version-lifecycle?tabs=key", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://{resource}.services.ai.azure.com/anthropic", "source": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/use-foundry-models-claude", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://{resource}.openai.azure.com/openai/v1", "source": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/api-version-lifecycle?tabs=key", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "baseten",
+    "name": "Baseten",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://inference.baseten.co/v1", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/baseten.json", "sourceType": "pi"}
+    ]
+  },
+  {
+    "id": "cerebras",
+    "name": "Cerebras",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.cerebras.ai/v1", "source": "https://inference-docs.cerebras.ai/resources/openai", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "cloudflare-ai-gateway",
+    "name": "Cloudflare AI Gateway",
+    "nameZh": "Cloudflare AI 网关",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://gateway.ai.cloudflare.com/v1/{CLOUDFLARE_ACCOUNT_ID}/{CLOUDFLARE_GATEWAY_ID}/compat", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/cloudflare-ai-gateway.json", "sourceType": "pi"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://gateway.ai.cloudflare.com/v1/{CLOUDFLARE_ACCOUNT_ID}/{CLOUDFLARE_GATEWAY_ID}/anthropic", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/cloudflare-ai-gateway.json", "sourceType": "pi"},
+      {"protocol": "openai-responses", "baseUrl": "https://gateway.ai.cloudflare.com/v1/{CLOUDFLARE_ACCOUNT_ID}/{CLOUDFLARE_GATEWAY_ID}/openai", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/cloudflare-ai-gateway.json", "sourceType": "pi"}
+    ]
+  },
+  {
+    "id": "cloudflare-workers-ai",
+    "name": "Cloudflare Workers AI",
+    "nameZh": "Cloudflare Workers AI",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/v1", "source": "https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/v1", "source": "https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "deepseek",
+    "name": "DeepSeek",
+    "nameZh": "深度求索 DeepSeek",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.deepseek.com", "source": "https://api-docs.deepseek.com/quick_start/agent_integrations/", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.deepseek.com/anthropic", "source": "https://api-docs.deepseek.com/quick_start/agent_integrations/", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.deepseek.com", "source": "https://api-docs.deepseek.com/guides/responses_api/", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "fireworks",
+    "name": "Fireworks AI",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.fireworks.ai/inference/v1", "source": "https://docs.fireworks.ai/tools-sdks/openai-compatibility", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.fireworks.ai/inference", "source": "https://docs.fireworks.ai/tools-sdks/anthropic-compatibility", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.fireworks.ai/inference/v1", "source": "https://docs.fireworks.ai/guides/response-api", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "github-copilot",
+    "name": "GitHub Copilot",
+    "accessNote": {"en":"Pi's individual-account endpoint. Sign in to Copilot through a compatible client to resolve the endpoint and token for your account.","zh":"这是 Pi 的个人账户入口。请通过兼容客户端登录 Copilot，获取账户对应的端点和令牌。"},
+    "endpoints": [
+      {"protocol":"openai-completions","baseUrl":"https://api.individual.githubcopilot.com","source":"https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/github-copilot.js","sourceType":"pi"},
+      {"protocol":"anthropic-messages","baseUrl":"https://api.individual.githubcopilot.com","source":"https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/github-copilot.js","sourceType":"pi"},
+      {"protocol":"openai-responses","baseUrl":"https://api.individual.githubcopilot.com","source":"https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/github-copilot.js","sourceType":"pi"}
+    ]
+  },
+  {
+    "id": "google",
+    "name": "Google Gemini",
+    "nameZh": "谷歌 Gemini",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://generativelanguage.googleapis.com/v1beta/openai", "source": "https://aistudio.google.com/docs/openai", "sourceType": "official"},
+      {"protocol": "google-generative-ai", "baseUrl": "https://generativelanguage.googleapis.com/v1beta", "source": "https://aistudio.google.com/api-reference/generate-content", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "google-vertex",
+    "name": "Google Cloud Vertex AI",
+    "nameZh": "谷歌云 Vertex AI",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/endpoints/openapi", "source": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/samples/generativeaionvertexai-gemini-chat-completions-streaming", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "groq",
+    "name": "Groq",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.groq.com/openai/v1", "source": "https://console.groq.com/docs/overview", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.groq.com/openai/v1", "source": "https://console.groq.com/docs/api-reference", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "huggingface",
+    "name": "Hugging Face Inference Providers",
+    "nameZh": "Hugging Face 推理服务",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://router.huggingface.co/v1", "source": "https://huggingface.co/docs/inference-providers/en/tasks/chat-completion", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://router.huggingface.co/v1", "source": "https://huggingface.co/docs/inference-providers/guides/responses-api", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "kimi-coding",
+    "name": "Kimi Code",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.kimi.com/coding/v1", "source": "https://www.kimi.com/code/docs/en/", "sourceType": "official"},
+      {"protocol": "openai-completions", "baseUrl": "https://api.kimi.ai/coding/v1", "source": "https://www.kimi.com/code/docs/en/", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.kimi.com/coding/", "source": "https://www.kimi.com/code/docs/third-party-tools/claude-code.html", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.kimi.ai/coding/", "source": "https://www.kimi.com/code/docs/en/third-party-tools/claude-code.html", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.kimi.com/coding/v1", "source": "https://www.kimi.com/code/docs/en/", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.kimi.ai/coding/v1", "source": "https://www.kimi.com/code/docs/en/", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "meta",
+    "name": "Meta",
+    "nameZh": "Meta",
+    "endpoints": [
+      {"protocol": "openai-responses", "baseUrl": "https://api.meta.ai/v1", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/meta.json", "sourceType": "pi"}
+    ]
+  },
+  {
+    "id": "minimax",
+    "name": "MiniMax",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.minimax.io/v1", "source": "https://platform.minimax.io/docs/api-reference/text-openai-api", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.minimax.io/anthropic", "source": "https://platform.minimax.io/docs/api-reference/text-anthropic-api", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.minimax.io/v1", "source": "https://platform.minimax.io/docs/api-reference/responses-create", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "minimax-cn",
+    "name": "MiniMax China",
+    "nameZh": "MiniMax 中国区",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.minimax.cn/v1", "source": "https://platform.minimaxi.com/docs/api-reference/text-openai-api", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.minimax.cn/anthropic", "source": "https://platform.minimaxi.com/docs/api-reference/text-anthropic-api", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.minimax.cn/v1", "source": "https://platform.minimaxi.com/docs/api-reference/responses-create", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "mistral",
+    "name": "Mistral AI",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.mistral.ai/v1", "source": "https://docs.mistral.ai/api/endpoint/chat", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.mistral.ai/v1", "source": "https://docs.mistral.ai/api/endpoint/responses", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "moonshotai",
+    "name": "Moonshot AI",
+    "nameZh": "月之暗面 Moonshot AI",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.moonshot.ai/v1", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/moonshotai.json", "sourceType": "pi"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.moonshot.ai/anthropic", "source": "https://www.kimi.ai/resources/claude-code-api", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.moonshot.ai/v1", "source": "https://www.kimi.ai/resources/codex-api", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "moonshotai-cn",
+    "name": "Moonshot AI China",
+    "nameZh": "月之暗面 Moonshot AI 中国区",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.moonshot.cn/v1", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/moonshotai-cn.json", "sourceType": "pi"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.moonshot.cn/anthropic", "source": "https://github.com/MoonshotAI/Kimi-K2.5/issues/27", "sourceType": "community"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.moonshot.cn/v1", "source": "https://www.kimi.ai/resources/codex-api", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "nvidia",
+    "name": "NVIDIA",
+    "nameZh": "英伟达 NVIDIA",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://integrate.api.nvidia.com/v1", "source": "https://docs.nvidia.com/openshell/latest/sandboxes/manage-providers", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "openai",
+    "name": "OpenAI",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.openai.com/v1", "source": "https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.openai.com/v1", "source": "https://developers.openai.com/api/reference/resources/responses/methods/create", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "opencode",
+    "name": "OpenCode Console",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://opencode.ai/inference/openai/v1", "source": "https://opencode.ai/docs/console/models/#endpoints", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://opencode.ai/inference/anthropic", "source": "https://opencode.ai/docs/console/models/#endpoints", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://opencode.ai/inference/openai/v1", "source": "https://opencode.ai/docs/console/models/#endpoints", "sourceType": "official"},
+      {"protocol": "google-generative-ai", "baseUrl": "https://opencode.ai/inference/google/v1beta", "source": "https://opencode.ai/docs/console/models/#endpoints", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "opencode-go",
+    "name": "OpenCode Go",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://opencode.ai/inference/go/openai/v1", "source": "https://opencode.ai/docs/console/go/#endpoints", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://opencode.ai/inference/go/anthropic", "source": "https://opencode.ai/docs/console/go/#endpoints", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://opencode.ai/inference/go/openai/v1", "source": "https://opencode.ai/docs/console/go/#endpoints", "sourceType": "official"},
+      {"protocol": "google-generative-ai", "baseUrl": "https://opencode.ai/inference/go/google/v1beta", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/opencode-go.json", "sourceType": "pi"}
+    ]
+  },
+  {
+    "id": "openrouter",
+    "name": "OpenRouter",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://openrouter.ai/api/v1", "source": "https://openrouter.ai/docs/quickstart", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://openrouter.ai/api", "source": "https://openrouter.ai/docs/guides/coding-agents/claude-code-integration", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://openrouter.ai/api/v1", "source": "https://openrouter.ai/docs/api/api-reference/responses/create-responses", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "qwen-token-plan",
+    "name": "Alibaba Cloud Qwen Token Plan",
+    "nameZh": "阿里云通义千问 Token Plan",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1", "source": "https://www.alibabacloud.com/help/en/model-studio/codex", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/apps/anthropic", "source": "https://www.alibabacloud.com/help/en/model-studio/more-tools", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1", "source": "https://www.alibabacloud.com/help/en/model-studio/codex", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "qwen-token-plan-cn",
+    "name": "Alibaba Cloud Qwen Token Plan China",
+    "nameZh": "阿里云通义千问 Token Plan（中国区）",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", "source": "https://help.aliyun.com/en/model-studio/codex", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic", "source": "https://help.aliyun.com/en/model-studio/base-url", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", "source": "https://help.aliyun.com/en/model-studio/codex", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "qwen-token-plan-individual",
+    "name": "Alibaba Cloud Qwen Token Plan Individual",
+    "nameZh": "阿里云通义千问 Token Plan（个人版）",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1", "source": "https://www.alibabacloud.com/help/en/model-studio/codex", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/apps/anthropic", "source": "https://www.alibabacloud.com/help/en/model-studio/more-tools", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1", "source": "https://www.alibabacloud.com/help/en/model-studio/codex", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "qwen-token-plan-individual-cn",
+    "name": "Alibaba Cloud Qwen Token Plan Individual China",
+    "nameZh": "阿里云通义千问 Token Plan（中国区个人版）",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", "source": "https://help.aliyun.com/en/model-studio/codex", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic", "source": "https://help.aliyun.com/en/model-studio/base-url", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", "source": "https://help.aliyun.com/en/model-studio/codex", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "together",
+    "name": "Together AI",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.together.ai/v1", "source": "https://docs.together.ai/docs/inference/openai-compatibility", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.together.ai", "source": "https://docs.together.ai/docs/inference/messages-api", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.together.ai/v1", "source": "https://docs.together.ai/docs/inference/responses-api", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "vercel-ai-gateway",
+    "name": "Vercel AI Gateway",
+    "nameZh": "Vercel AI 网关",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://ai-gateway.vercel.sh/v1", "source": "https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-chat-completions", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://ai-gateway.vercel.sh", "source": "https://vercel.com/docs/ai-gateway/sdks-and-apis/anthropic-messages-api", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://ai-gateway.vercel.sh/v1", "source": "https://vercel.com/docs/ai-gateway/sdks-and-apis/openresponses", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "volcengine",
+    "name": "Volcengine Ark",
+    "nameZh": "火山引擎方舟",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://ark.cn-beijing.volces.com/api/v3", "source": "https://docs.volcengine.com/docs/ark/base-url-and-authentication?lang=zh", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://ark.cn-beijing.volces.com/api/compatible", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/go-live-faq", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://ark.cn-beijing.volces.com/api/v3", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/create-model-responses-api", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "volcengine-coding-plan",
+    "name": "Volcengine Ark Coding Plan",
+    "nameZh": "火山引擎方舟 Coding Plan",
+    "billing": {"en": "Personal plans: Lite ¥40/month, Pro ¥200/month.", "zh": "个人版月费：Lite ¥40，Pro ¥200。", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/model-pricing#d3774bbd"},
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://ark.cn-beijing.volces.com/api/coding/v3", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/coding-plan-personal-ai-opencode", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://ark.cn-beijing.volces.com/api/coding", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/coding-plan-personal-ai-claude-code", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://ark.cn-beijing.volces.com/api/coding/v3", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/coding-plan-personal-ai-codex", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "volcengine-agent-plan",
+    "name": "Volcengine Ark Agent Plan",
+    "nameZh": "火山引擎方舟 Agent Plan",
+    "billing": {"en": "Personal plans: Small ¥40, Medium ¥200, Large ¥500, Max ¥1,000 per month.", "zh": "个人版月费：Small ¥40，Medium ¥200，Large ¥500，Max ¥1,000。", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/model-pricing#a4e1c7d2"},
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://ark.cn-beijing.volces.com/api/plan/v3", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/agent-plan-personal-zcode", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://ark.cn-beijing.volces.com/api/plan", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/agent-plan-personal-zcode", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://ark.cn-beijing.volces.com/api/plan/v3", "source": "https://console.volcengine.com/ark/region:cn-beijing/docs/agent-plan-personal-zcode", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "xai",
+    "name": "xAI",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.x.ai/v1", "source": "https://docs.x.ai/developers/model-capabilities/text/comparison", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.x.ai/v1", "source": "https://docs.x.ai/developers/model-capabilities/text/comparison", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "xiaomi",
+    "name": "Xiaomi MiMo",
+    "nameZh": "小米 MiMo",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.xiaomimimo.com/v1", "source": "https://mimo.mi.com/docs/en-US/quick-start/summary/first-api-call", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.xiaomimimo.com/anthropic", "source": "https://mimo.mi.com/docs/en-US/api/chat/anthropic-api", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.xiaomimimo.com/v1", "source": "https://mimo.mi.com/docs/en-US/api/chat/responses-post", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "xiaomi-token-plan-ams",
+    "name": "Xiaomi MiMo Token Plan Amsterdam",
+    "nameZh": "小米 MiMo Token Plan（阿姆斯特丹）",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://token-plan-ams.xiaomimimo.com/v1", "source": "https://mimo.mi.com/docs/en-US/tokenplan/Token%20Plan/quick-access", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://token-plan-ams.xiaomimimo.com/anthropic", "source": "https://mimo.mi.com/docs/en-US/tokenplan/Token%20Plan/quick-access", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://token-plan-ams.xiaomimimo.com/v1", "source": "https://mimo.mi.com/docs/en-US/tokenplan/Token%20Plan/quick-access", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "xiaomi-token-plan-cn",
+    "name": "Xiaomi MiMo Token Plan China",
+    "nameZh": "小米 MiMo Token Plan（中国区）",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://token-plan-cn.xiaomimimo.com/v1", "source": "https://mimo.mi.com/docs/en-US/tokenplan/Token%20Plan/quick-access", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://token-plan-cn.xiaomimimo.com/anthropic", "source": "https://mimo.mi.com/docs/en-US/tokenplan/Token%20Plan/quick-access", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://token-plan-cn.xiaomimimo.com/v1", "source": "https://mimo.mi.com/docs/en-US/tokenplan/integration/codex-configuration", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "xiaomi-token-plan-sgp",
+    "name": "Xiaomi MiMo Token Plan Singapore",
+    "nameZh": "小米 MiMo Token Plan（新加坡）",
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://token-plan-sgp.xiaomimimo.com/v1", "source": "https://mimo.mi.com/docs/en-US/tokenplan/Token%20Plan/quick-access", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://token-plan-sgp.xiaomimimo.com/anthropic", "source": "https://mimo.mi.com/docs/en-US/tokenplan/Token%20Plan/quick-access", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://token-plan-sgp.xiaomimimo.com/v1", "source": "https://mimo.mi.com/docs/en-US/tokenplan/Token%20Plan/quick-access", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "zai-api",
+    "name": "Z.ai API",
+    "billing": {"en": "International pay-as-you-go API. Official prices are in USD.", "zh": "国际区按量 API，官方以美元计价。", "source": "https://docs.z.ai/guides/overview/pricing"},
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.z.ai/api/paas/v4", "source": "https://docs.z.ai/guides/develop/openai/python", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "zai-api-cn",
+    "name": "BigModel API",
+    "billing": {"en": "China pay-as-you-go API. Official prices are in CNY.", "zh": "中国区按量 API，官方以人民币计价。", "source": "https://docs.bigmodel.cn/cn/guide/start/pricing"},
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://open.bigmodel.cn/api/paas/v4", "source": "https://docs.bigmodel.cn/cn/guide/develop/openai/introduction", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://open.bigmodel.cn/api/anthropic", "source": "https://docs.bigmodel.cn/cn/guide/develop/claude/introduction", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://open.bigmodel.cn/api/v1", "source": "https://docs.bigmodel.cn/cn/guide/develop/responses/introduction", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "zai",
+    "name": "Z.ai Coding Plan",
+    "accessNote": {"en": "Subscription quota. Use the Coding Plan key for this region.", "zh": "按套餐额度计费，请使用对应地区的 Coding Plan Key。"},
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://api.z.ai/api/coding/paas/v4", "source": "https://zcode.z.ai/en/docs/configuration", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.z.ai/api/anthropic", "source": "https://docs.z.ai/devpack/tool/claude", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.z.ai/api/v1", "source": "https://docs.z.ai/devpack/tool/codex", "sourceType": "official"}
+    ]
+  },
+  {
+    "id": "zai-coding-cn",
+    "name": "BigModel Coding Plan",
+    "accessNote": {"en": "Subscription quota. Use the Coding Plan key for this region.", "zh": "按套餐额度计费，请使用对应地区的 Coding Plan Key。"},
+    "endpoints": [
+      {"protocol": "openai-completions", "baseUrl": "https://open.bigmodel.cn/api/coding/paas/v4", "source": "https://zcode.z.ai/en/docs/configuration", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://open.bigmodel.cn/api/anthropic", "source": "https://github.com/MetaGLM/glm-cookbook/blob/main/vibecoding/glm-4.5-claude-code-integration.md", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://open.bigmodel.cn/api/v1", "source": "https://docs.bigmodel.cn/cn/coding-plan/tool/codex", "sourceType": "official"}
+    ]
+  }
+]

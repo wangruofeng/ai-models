@@ -25,10 +25,14 @@
   <nav class="sticky-nav">
     <div class="sticky-nav-inner">
       <span class="nav-project-name"><img class="nav-project-icon" src="icon.svg" width="32" height="32" alt=""><span data-i18n="h1">Model Catalog</span></span>
-      <div class="sticky-nav-controls">
+      <div class="sticky-nav-controls home-nav-controls">
+        <a class="nav-toggle" href="sota.html" data-i18n="sotaPage">SOTA models</a>
+        <button class="nav-toggle" id="api-open" type="button" aria-haspopup="dialog" data-i18n="apiTitle">API Base URLs</button>
+        <a class="nav-toggle" href="changelog.html" data-i18n="changelog">Changelog</a>
         <a class="nav-toggle" href="about.html" data-i18n="navAbout">介绍</a>
-        <button class="nav-toggle" id="lang-toggle" type="button" data-i18n-title="langTitle" title="Switch language">中文</button>
+        <div class="sticky-nav-controls">
         <span class="sticky-nav-controls-sep" aria-hidden="true">&middot;</span>
+        <button class="nav-toggle" id="lang-toggle" type="button" data-i18n-title="langTitle" title="Switch language">中文</button>
         <button class="nav-toggle theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <mask id="theme-moon-mask">
@@ -44,6 +48,7 @@
         </g>
       </svg>
         </button>
+        </div>
       </div>
     </div>
   </nav>
@@ -57,13 +62,13 @@
       <div class="content-card-body">
         <div class="action-bar models-action-bar">
           <label class="action-bar-field">
-            <span class="field-label" data-i18n="filterName">Filter by name</span>
-            <input class="text-control" id="name-filter" type="search" placeholder="Search model name, ID or provider…" autocomplete="off" spellcheck="false">
+            <span class="field-label" data-i18n="filterName">Search models</span>
+            <input class="text-control" id="name-filter" type="search" placeholder="Name, ID, or tag…" autocomplete="off" spellcheck="false">
           </label>
           <div class="action-bar-field">
             <span class="field-label" id="provider-label" data-i18n="filterProvider">Filter by provider</span>
             <details class="provider-filter" id="provider-filter">
-              <summary class="select-control" aria-labelledby="provider-label provider-summary"><span id="provider-summary">All providers</span></summary>
+              <summary class="select-control" aria-labelledby="provider-label provider-summary"><span class="provider-summary" id="provider-summary">All providers</span></summary>
               <div class="provider-options" role="group" aria-labelledby="provider-label"></div>
             </details>
           </div>
@@ -161,6 +166,33 @@
     <div class="data-table-wrap pk-table-wrap" tabindex="0" role="region" aria-labelledby="pk-title">
       <table class="data-table pk-table" id="pk-table"></table>
     </div>
+  </dialog>
+
+  <dialog class="api-dialog" id="api-dialog" aria-labelledby="api-title">
+    <header class="api-header">
+      <h2 id="api-title" data-i18n="apiTitle">API Base URLs</h2>
+      <form method="dialog"><button class="nav-toggle" data-i18n="pkClose">Close</button></form>
+    </header>
+    <p class="api-note" data-i18n="apiNote">Use the Base URL for your protocol. Replace any {placeholders} with your values.</p>
+    <div class="api-filters">
+      <div>
+        <span class="field-label" id="api-provider-label" data-i18n="filterProvider">Filter by provider</span>
+        <details class="provider-filter" id="api-provider">
+          <summary class="select-control" aria-labelledby="api-provider-label api-provider-summary"><span class="provider-summary" id="api-provider-summary">All providers</span></summary>
+          <div class="provider-options" role="group" aria-labelledby="api-provider-label"></div>
+        </details>
+      </div>
+      <label><span class="field-label" data-i18n="apiSearch">Search provider name or ID</span><input class="text-control" id="api-search" type="search" autocomplete="off" autofocus></label>
+      <label><span class="field-label" data-i18n="apiProtocol">Protocol</span><select class="select-control" id="api-protocol">
+        <option value="" data-i18n="apiAll">All protocols</option>
+        <option value="openai-completions">OpenAI Chat Completions</option>
+        <option value="anthropic-messages">Anthropic Messages</option>
+        <option value="openai-responses">OpenAI Responses</option>
+        <option value="google-generative-ai">Google Generative AI</option>
+      </select></label>
+    </div>
+    <p id="api-status" class="api-note" role="status"></p>
+    <div id="api-results" class="api-results"></div>
   </dialog>
 
   <footer class="site-footer">

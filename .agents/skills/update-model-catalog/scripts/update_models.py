@@ -15,12 +15,13 @@ URL = 'https://pi.dev/models'
 ROOT = Path(__file__).resolve().parents[4]
 FIELDS = ['context', 'input', 'output', 'cacheRead', 'cacheWrite']
 
-# 人工核对的字段覆盖：源站把缓存写入价标为 0，实际是未披露，须保持 null（2026-10-21 人工核实）。
+# DeepSeek 未单独公布缓存写入价。上下文采用官方 /models 文档的精确值。
 # 条目被源站下架后此处会残留，同步时打印警告提醒清理。
 MANUAL_OVERRIDES = {
-    ('deepseek', 'deepseek-v4-pro'): {'cw': None},
-    ('deepseek', 'deepseek-flash'): {'cw': None},
+    ('deepseek', 'deepseek-v4-pro'): {'ctx': 1048576, 'cw': None},
+    ('deepseek', 'deepseek-flash'): {'ctx': 1048576, 'cw': None},
 }
+SUBSCRIPTION_PROVIDERS = {'zai', 'zai-coding-cn'}
 
 
 class CatalogParser(HTMLParser):
@@ -125,10 +126,12 @@ def main():
     previous = keyed(old['models'])
     for model in models:
         prior = previous.get((model['p'], model['id']), {})
-        for field in ('sota', 'traits'):
+        for field in ('sota', 'traits', 'imageGeneration', 'release'):
             if field in prior:
                 model[field] = prior[field]
         model.update(MANUAL_OVERRIDES.get((model['p'], model['id']), {}))
+        if model['p'] in SUBSCRIPTION_PROVIDERS:
+            model.update({'in': None, 'out': None, 'cr': None, 'cw': None})
     stale = MANUAL_OVERRIDES.keys() - source.keys()
     if stale:
         print(f'警告：人工覆盖的条目已不在源站，请清理 MANUAL_OVERRIDES：{sorted(stale)}', file=sys.stderr)
@@ -150,14 +153,10 @@ def main():
     date = datetime.now(ZoneInfo('Asia/Taipei')).strftime('%Y-%m-%d')
     readme_path = ROOT / 'README.md'
     readme = readme_path.read_text()
-    readme, replacements = re.subn(r'\d+ 个模型', f'{len(models)} 个模型', readme)
-    if not replacements or '## 数据\n' not in readme:
-        raise ValueError('README 结构已变化，需要更新统计替换逻辑')
-    readme = re.sub(r'\d+ 个 provider', f'{len(providers)} 个 provider', readme)
-    readme = re.sub(r'N / \d+', f'N / {len(models)}', readme)
-    readme = re.sub(r'\n+最近同步：[^\n]*\n*', '\n\n', readme)
-    note = f'\n最近同步：{date}。pi.dev/models 源站共 {expected} 个模型，另保留 {len(supplements)} 个官方补充条目，合计 {len(models)} 个模型、{len(providers)} 个 provider。\n'
-    readme = re.sub(r'## 数据\n+', '## 数据\n' + note + '\n', readme, count=1)
+    note = f'最近同步：{date}。pi.dev/models 源站共 {expected} 个模型，另保留 {len(supplements)} 个官方补充条目，合计 {len(models)} 个模型、{len(providers)} 个 provider。'
+    readme, replacements = re.subn(r'(?m)^## 数据\n\n最近同步：[^\n]*$', f'## 数据\n\n{note}', readme)
+    if replacements != 1:
+        raise ValueError('README 的「数据」章节需要且只能有一条同步摘要')
     summary = {'source': expected, 'supplements': len(supplements), 'total': len(models), 'providers': len(providers),
                'added': len(current.keys() - previous.keys()), 'removed': len(previous.keys() - current.keys()),
                'updated': sum(current[k] != previous[k] for k in current.keys() & previous.keys()), 'written': args.write}

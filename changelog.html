@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog · Model Catalog</title>
+  <meta name="description" content="Major updates to the model catalog, pricing, and API directory.">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // 尽早应用主题与语言，避免闪烁
+    (function () {
+      try {
+        var t = localStorage.getItem('pi-theme');
+        if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+        var lang = localStorage.getItem('pi-lang');
+        if (!lang) lang = /^zh\b|zh-/i.test(navigator.language || '') ? 'zh-CN' : 'en';
+        document.documentElement.lang = lang === 'zh-CN' ? 'zh-CN' : 'en';
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+</head>
+<body class="changelog">
+  <nav class="sticky-nav">
+    <div class="sticky-nav-inner">
+      <a class="nav-project-name" href="index.html"><img class="nav-project-icon" src="icon.svg" width="32" height="32" alt=""><span data-i18n="h1">Model Catalog</span></a>
+      <div class="sticky-nav-controls">
+        <button class="nav-toggle" id="lang-toggle" type="button" data-i18n-title="langTitle" title="Switch language">中文</button>
+        <span class="sticky-nav-controls-sep" aria-hidden="true">&middot;</span>
+        <button class="nav-toggle theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="theme-moon-mask">
+          <rect width="24" height="24" fill="#fff"></rect>
+          <circle class="theme-toggle-hole" cx="17" cy="7" r="7" fill="#000"></circle>
+        </mask>
+        <circle class="theme-toggle-core" cx="12" cy="12" mask="url(#theme-moon-mask)"></circle>
+        <g class="theme-toggle-rays">
+          <line x1="12" y1="1.6" x2="12" y2="3.8"></line><line x1="12" y1="20.2" x2="12" y2="22.4"></line>
+          <line x1="1.6" y1="12" x2="3.8" y2="12"></line><line x1="20.2" y1="12" x2="22.4" y2="12"></line>
+          <line x1="4.6" y1="4.6" x2="6.2" y2="6.2"></line><line x1="17.8" y1="17.8" x2="19.4" y2="19.4"></line>
+          <line x1="4.6" y1="19.4" x2="6.2" y2="17.8"></line><line x1="17.8" y1="6.2" x2="19.4" y2="4.6"></line>
+        </g>
+      </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content-shell changelog-page">
+    <header class="changelog-heading">
+      <h1 data-i18n="changelog">Changelog</h1>
+      <p data-i18n="changelogDescription">Major updates to the model catalog, pricing, and API directory.</p>
+    </header>
+
+    <section class="changelog-entry">
+      <header>
+        <h2><span lang="zh-CN">SOTA 时间轴与 API 地址</span><span lang="en">SOTA timeline and API directory</span></h2>
+        <code>v1.1.0</code>
+        <time datetime="2026-11-15">2026-11-15</time>
+      </header>
+      <ol>
+        <li><span lang="zh-CN">新增 <a href="sota.html">SOTA 模型页</a>，按发布日期倒序展示原厂旗舰，附能力分类与官方来源。</span><span lang="en">Added a <a href="sota.html">SOTA timeline</a> for first-party flagship models, with release dates, capabilities, and official sources.</span></li>
+        <li><span lang="zh-CN">新增 API 地址目录，覆盖四种协议，支持供应商多选、模糊搜索和一键复制 Base URL。</span><span lang="en">Added an API directory for four protocols, with multi-provider selection, fuzzy search, and one-click Base URL copying.</span></li>
+        <li><span lang="zh-CN">补充火山方舟 API、Coding Plan、Agent Plan，以及智谱中国区和国际区的 API 与 Coding Plan 数据。</span><span lang="en">Expanded catalog coverage for Volcengine's API, Coding Plan, and Agent Plan, as well as Z.ai and BigModel API and Coding Plan entries.</span></li>
+        <li><span lang="zh-CN">同一厂商的地区和套餐入口相邻排列。首页搜索支持空格分隔的多关键词，也可搜索生图、免费、开源、国产和 SOTA 标签。</span><span lang="en">Grouped regional and plan variants by provider. Homepage search now supports multiple keywords and tags for image generation, free models, open weights, Chinese models, and SOTA.</span></li>
+      </ol>
+    </section>
+
+    <section class="changelog-entry">
+      <header>
+        <h2><span lang="zh-CN">旗舰模型标记</span><span lang="en">Flagship model labels</span></h2>
+        <time datetime="2026-11-13">2026-11-13</time>
+      </header>
+      <ol>
+        <li><span lang="zh-CN">核对旗舰模型的通用、推理、编程和图像能力，为 SOTA 标记附上官方依据与核对日期。</span><span lang="en">Reviewed flagship models across general use, reasoning, coding, and image generation, with official sources and verification dates.</span></li>
+        <li><span lang="zh-CN">新增项目级维护流程，用于更新和核对模型的 SOTA 标记。</span><span lang="en">Added a project workflow for refreshing and verifying SOTA labels.</span></li>
+      </ol>
+    </section>
+
+    <section class="changelog-entry">
+      <header>
+        <h2><span lang="zh-CN">模型对比与移动端</span><span lang="en">Model comparison and mobile layout</span></h2>
+        <time datetime="2026-10-20">2026-10-20</time>
+      </header>
+      <ol>
+        <li><span lang="zh-CN">桌面端新增模型 PK，可跨供应商比较上下文、价格和模型属性。</span><span lang="en">Added desktop model comparison for context windows, pricing, and model attributes across providers.</span></li>
+        <li><span lang="zh-CN">优化供应商多选、收藏与移动端列表布局。</span><span lang="en">Improved provider selection, favorites, and the mobile list layout.</span></li>
+      </ol>
+    </section>
+
+    <section class="changelog-entry">
+      <header>
+        <h2><span lang="zh-CN">筛选与价格比较</span><span lang="en">Filters and price comparison</span></h2>
+        <time datetime="2026-10-18">2026-10-18</time>
+      </header>
+      <ol>
+        <li><span lang="zh-CN">完善上下文、开源和国产筛选，支持价格排序和六种货币换算。</span><span lang="en">Expanded context, open-weight, and Chinese model filters, with price sorting and conversion across six currencies.</span></li>
+        <li><span lang="zh-CN">补充 GPT 生图模型的官方价格，区分文本与图像输入、输出及缓存计价。</span><span lang="en">Added official GPT Image pricing with separate text and image rates where available.</span></li>
+      </ol>
+    </section>
+
+    <section class="changelog-entry">
+      <header>
+        <h2><span lang="zh-CN">模型目录上线</span><span lang="en">Model catalog launch</span></h2>
+        <time datetime="2026-09-20">2026-09-20</time>
+      </header>
+      <ol>
+        <li><span lang="zh-CN">基于 Pi 模型目录上线，按供应商汇总模型 ID、上下文窗口、输入输出及缓存价格。</span><span lang="en">Launched the Pi-based catalog with model IDs, context windows, and input, output, and cache pricing by provider.</span></li>
+      </ol>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

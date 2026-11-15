@@ -2,7 +2,10 @@
 (function () {
   'use strict';
 
-  document.getElementById('footer-github').hidden = !(
+  var sotaList = document.getElementById('sota-models');
+  var isChangelog = document.body.classList.contains('changelog');
+  var githubLink = document.getElementById('footer-github');
+  if (githubLink) githubLink.hidden = !(
     window.location.protocol === 'file:' ||
     ['localhost', '127.0.0.1', '[::1]'].indexOf(window.location.hostname) !== -1
   );
@@ -51,13 +54,23 @@
       description: 'Catalog of AI models across providers: context window, input/output and cache pricing.',
       navHome: 'Pi model catalog',
       navAbout: 'About',
+      changelog: 'Changelog',
+      changelogDescription: 'Major updates to the model catalog, pricing, and API directory.',
+      apiTitle: 'API Base URLs',
+      apiSearch: 'Search provider name or ID',
+      apiSearchPlaceholder: 'Name or ID',
+      apiBilling: 'Pricing',
+      apiNote: 'Use the Base URL for your protocol. Replace any {placeholders} with your values. Model availability and authentication vary by provider.',
+      apiProtocol: 'Protocol', apiAll: 'All protocols', apiLoading: 'Loading API endpoints…',
+      apiError: 'Could not load API endpoints. Close and reopen to retry.', apiEmpty: 'No matching endpoints.',
+      apiOfficial: 'Official docs', apiPi: 'Pi catalog', apiCommunity: 'Community report', apiCopy: 'Copy Base URL', apiCopied: 'Copied', apiCopyError: 'Select URL to copy',
       footerBlog: 'Blog',
       footerSource: 'Data primarily sourced from',
       h1: 'Model Catalog',
       h2: 'All models',
       caption: 'All models',
-      filterName: 'Filter by name',
-      filterPlaceholder: 'Search model name, ID or provider…',
+      filterName: 'Search models',
+      filterPlaceholder: 'Name, ID, or tag…',
       pkTitle: 'Model PK',
       pkSelect: 'Select for PK',
       pkStart: 'View comparison',
@@ -79,6 +92,8 @@
       traitNo: 'No',
       badgeOpen: 'Open',
       badgeChina: 'Chinese',
+      badgeFree: 'Free',
+      badgeImageGeneration: 'Image generation',
       openHelp: 'Includes released model weights with usage restrictions; check the original license.',
       chinaHelp: 'Based on the model developer, regardless of API hosting provider.',
       sotaAll: 'All',
@@ -86,6 +101,12 @@
       sotaNo: 'Unmarked',
       sotaHelp: 'Manually verified flagship models by capability; not a cross-vendor ranking. Unmarked models may be unverified.',
       sotaCategories: { general: 'General', reasoning: 'Reasoning', coding: 'Coding', image: 'Image' },
+      sotaPage: 'SOTA models',
+      sotaPageDescription: 'Flagship models from their original providers, newest first.',
+      sotaPageSource: 'Official source',
+      sotaPageReleaseUnknown: 'Release date unknown',
+      sotaPageLoading: 'Loading models…',
+      sotaPageEmpty: 'No first-party SOTA models available.',
       sotaDetail: function (categories, date) { return 'Flagship: ' + categories + ' · Verified ' + date; },
       contextUnknown: 'Unknown',
       contextSelected: function (n) { return n + ' selected'; },
@@ -128,13 +149,23 @@
       description: '各大提供商的 AI 模型目录：上下文窗口、输入/输出与缓存价格。',
       navHome: 'Pi 模型目录',
       navAbout: '介绍',
+      changelog: '更新日志',
+      changelogDescription: '记录模型目录、价格和 API 地址的主要更新。',
+      apiTitle: 'API 地址',
+      apiSearch: '搜索供应商名称或 ID',
+      apiSearchPlaceholder: '名称或 ID',
+      apiBilling: '价格说明',
+      apiNote: '按协议使用对应的 Base URL，并替换 {占位符}。可用模型和鉴权方式以各提供商的说明为准。',
+      apiProtocol: '协议', apiAll: '全部协议', apiLoading: '正在读取 API 地址…',
+      apiError: '无法读取 API 地址。关闭后重新打开即可重试。', apiEmpty: '没有匹配的 API 地址。',
+      apiOfficial: '官方文档', apiPi: 'Pi 目录', apiCommunity: '社区反馈', apiCopy: '复制 Base URL', apiCopied: '已复制', apiCopyError: '请选中地址复制',
       footerBlog: '博客',
       footerSource: '数据主要参考',
       h1: '模型目录',
       h2: '全部模型',
       caption: '全部模型',
-      filterName: '按名称筛选',
-      filterPlaceholder: '输入模型名称、ID 或提供商…',
+      filterName: '搜索模型',
+      filterPlaceholder: '名称、ID 或标签…',
       pkTitle: '模型 PK',
       pkSelect: '加入 PK',
       pkStart: '查看对比',
@@ -156,6 +187,8 @@
       traitNo: '否',
       badgeOpen: '开源',
       badgeChina: '国产',
+      badgeFree: '免费',
+      badgeImageGeneration: '生图',
       openHelp: '包含已开放权重但带使用限制的模型，使用时请查阅原始许可证。',
       chinaHelp: '按模型研发方判断，与 API 托管平台无关。',
       sotaAll: '不限',
@@ -163,6 +196,12 @@
       sotaNo: '未标记',
       sotaHelp: '按主要能力人工核实的供应商旗舰，不代表跨厂商排名；未标记也可能是尚未核实。',
       sotaCategories: { general: '通用', reasoning: '推理', coding: '编程', image: '图像' },
+      sotaPage: 'SOTA 模型',
+      sotaPageDescription: '原厂旗舰模型，按发布日期从新到旧排列。',
+      sotaPageSource: '官方依据',
+      sotaPageReleaseUnknown: '发布日期未知',
+      sotaPageLoading: '正在读取模型…',
+      sotaPageEmpty: '暂无原厂 SOTA 模型。',
       sotaDetail: function (categories, date) { return '旗舰能力：' + categories + ' · 核对日期：' + date; },
       contextUnknown: '未知',
       contextSelected: function (n) { return '已选 ' + n + ' 项'; },
@@ -220,11 +259,11 @@
   }
 
   function applyI18n() {
-    els.nameFilter.placeholder = t('filterPlaceholder');
     document.documentElement.lang = lang;
-    document.title = t('title');
+    var pageTitle = isChangelog ? 'changelog' : sotaList ? 'sotaPage' : '';
+    document.title = pageTitle ? t(pageTitle) + ' · ' + t('h1') : t('title');
     var meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', t('description'));
+    if (meta) meta.setAttribute('content', t(pageTitle ? pageTitle + 'Description' : 'description'));
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var v = t(el.getAttribute('data-i18n'));
       if (v != null) el.textContent = v;
@@ -237,10 +276,13 @@
       var v = t(el.getAttribute('data-i18n-title'));
       if (v != null) el.title = v;
     });
+    refreshToggleLabels();
+    if (sotaList || isChangelog) return;
+    els.nameFilter.placeholder = t('filterPlaceholder');
+    document.getElementById('api-search').placeholder = t('apiSearchPlaceholder');
     // "All providers" 选项（其余 provider 名为专有名词，不翻译）
     var allOpt = els.providerFilter && els.providerFilter.querySelector('option[value="all"]');
     if (allOpt) allOpt.textContent = t('allProviders');
-    refreshToggleLabels();
     updateCurrencyUI();
     updateSortUI();
     updateContextSummary();
@@ -251,6 +293,10 @@
     try { localStorage.setItem('pi-lang', next); } catch (e) { /* ignore */ }
     applyI18n();
     if (data) {
+      if (sotaList) {
+        renderSotaPage();
+        return;
+      }
       buildProviderSelect();
       render();
     }
@@ -409,10 +455,11 @@
     mistral: 'mistral', moonshotai: 'moonshot', 'moonshotai-cn': 'moonshot', nvidia: 'nvidia',
     openai: 'openai', 'openai-codex': 'openai', opencode: 'opencode', 'opencode-go': 'opencode',
     openrouter: 'openrouter', 'qwen-token-plan': 'qwen', 'qwen-token-plan-cn': 'qwen',
-    'qwen-token-plan-individual': 'qwen', radius: 'radius', together: 'together-ai',
-    'vercel-ai-gateway': 'vercel', xai: 'xai', xiaomi: 'xiaomi',
+    'qwen-token-plan-individual': 'qwen', 'qwen-token-plan-individual-cn': 'qwen', radius: 'radius', together: 'together-ai',
+    'vercel-ai-gateway': 'vercel', volcengine: 'volcengine', 'volcengine-coding-plan': 'volcengine',
+    'volcengine-agent-plan': 'volcengine', xai: 'xai', xiaomi: 'xiaomi',
     'xiaomi-token-plan-ams': 'xiaomi', 'xiaomi-token-plan-cn': 'xiaomi', 'xiaomi-token-plan-sgp': 'xiaomi',
-    zai: 'zhipu', 'zai-coding-cn': 'zhipu'
+    zai: 'zai', 'zai-api': 'zai', 'zai-coding-cn': 'zhipu', 'zai-api-cn': 'zhipu'
   };
   var MODEL_BRANDS = [
     [/deepseek/i, 'deepseek'], [/claude/i, 'claude'], [/gemini/i, 'gemini'], [/gemma/i, 'gemma-google'],
@@ -421,14 +468,71 @@
     [/llama|muse[- ]|meta\//i, 'meta'], [/grok/i, 'xai'],
     [/mistral|mixtral|ministral|magistral|codestral|devstral|pixtral|voxtral/i, 'mistral'],
     [/nemotron|nvidia|cosmos/i, 'nvidia'], [/nova[- .]|amazon\//i, 'amazon-web-services'],
-    [/bytedance|seed[- ]/i, 'bytedance'], [/hunyuan|tencent|\bhy[34]/i, 'tencent'],
+    [/bytedance|doubao|seed[- ]/i, 'bytedance'], [/hunyuan|tencent|\bhy[34]/i, 'tencent'],
     [/stepfun|step-[235]/i, 'stepfun'], [/longcat/i, 'longcat'], [/cohere|command[- ]/i, 'cohere'],
     [/ai21|jamba/i, 'ai21labs-jamba'], [/perplexity|sonar/i, 'perplexity'],
     [/inclusionai|\b(?:ling|ring)-/i, 'antgroup']
   ];
 
+  function orderProviders(ids, prioritizeFavorites) {
+    var groups = new Map();
+    ids.forEach(function (id) {
+      var family = PROVIDER_BRANDS[id] || id;
+      if (family === 'zai') family = 'zhipu';
+      if (id === 'kimi-coding') family = 'moonshot';
+      if (!groups.has(family)) groups.set(family, []);
+      groups.get(family).push(id);
+    });
+    var ordered = Array.from(groups.values());
+    if (prioritizeFavorites) {
+      var favorites = new Set(favoriteProviders);
+      ordered.sort(function (a, b) {
+        return Number(b.some(function (id) { return favorites.has(id); })) -
+               Number(a.some(function (id) { return favorites.has(id); }));
+      });
+    }
+    return ordered.flat();
+  }
+
   function brandIcon(brand) {
     return '<img class="brand-icon" src="assets/brands/' + (brand || 'model') + '.svg" width="18" height="18" alt="" aria-hidden="true" loading="lazy" decoding="async">';
+  }
+
+  var providerDetails = new Map();
+  var providerDirectoryRequest;
+
+  function loadProviderDirectory() {
+    if (!providerDirectoryRequest) {
+      providerDirectoryRequest = fetch('provider-apis.json').then(function (response) {
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.json();
+      }).then(function (providers) {
+        providerDetails = new Map(providers.map(function (provider) { return [provider.id, provider]; }));
+        if (data) {
+          if (sotaList) renderSotaPage();
+          else {
+            buildProviderSelect();
+            render();
+          }
+        }
+        return providers;
+      }).catch(function (error) {
+        providerDirectoryRequest = null;
+        throw error;
+      });
+    }
+    return providerDirectoryRequest;
+  }
+
+  function providerName(id) {
+    var provider = providerDetails.get(id);
+    return provider ? (lang === 'zh-CN' && provider.nameZh || provider.name) : id;
+  }
+
+  function providerIdentity(id) {
+    var name = providerName(id);
+    return '<span class="provider-identity">' + brandIcon(PROVIDER_BRANDS[id]) + ' ' +
+      (name === id ? '' : escapeHtml(name) + ' ') + '<code>' + escapeHtml(id) + '</code></span>';
   }
 
   function modelBrand(model) {
@@ -439,6 +543,53 @@
     return null;
   }
 
+  function renderSotaPage() {
+    var directProviders = new Set([
+      'anthropic', 'ant-ling', 'cerebras', 'deepseek', 'google', 'meta', 'minimax', 'minimax-cn',
+      'mistral', 'moonshotai', 'moonshotai-cn', 'nvidia', 'openai', 'volcengine', 'xai', 'xiaomi', 'zai-api', 'zai-api-cn'
+    ]);
+    // 这些原厂入口也托管其他厂商的模型，只保留自研系列。
+    var ownModels = {
+      mistral: /^(?:mistral|mixtral|ministral|magistral|codestral|devstral|pixtral|voxtral)(?:-|$)/,
+      nvidia: /^nvidia\//,
+      volcengine: /^doubao-/
+    };
+    var regionalProviders = { 'minimax-cn': 'minimax', 'moonshotai-cn': 'moonshotai', 'zai-api-cn': 'zai-api' };
+    var groups = new Map();
+    data.models.forEach(function (model) {
+      if (!model.sota || !directProviders.has(model.p)) return;
+      if (ownModels[model.p] && !ownModels[model.p].test(model.id)) return;
+      var provider = regionalProviders[model.p] || model.p;
+      if (!groups.has(provider)) groups.set(provider, new Map());
+      var models = groups.get(provider);
+      if (!models.has(model.id) || model.p === provider) models.set(model.id, model);
+    });
+    var entries = [];
+    groups.forEach(function (models, provider) {
+      models.forEach(function (model) { entries.push({ provider: provider, model: model }); });
+    });
+    entries.sort(function (a, b) {
+      return (b.model.release?.date || '').localeCompare(a.model.release?.date || '');
+    });
+    var timeline = entries.map(function ({ provider, model }) {
+      var release = model.release;
+      var categories = model.sota.categories.map(function (key) { return t('sotaCategories')[key]; });
+      return '<li class="sota-event"><p class="sota-release">' +
+        (release ? '<a href="' + escapeHtml(release.source) + '" target="_blank" rel="noopener noreferrer"><time datetime="' +
+          escapeHtml(release.date) + '">' + escapeHtml(release.date) + '</time></a>' : t('sotaPageReleaseUnknown')) +
+        '</p><article class="sota-card surface-panel" data-provider="' + escapeHtml(provider) + '">' +
+        '<div class="sota-model-header"><span class="sota-provider-icon">' + brandIcon(PROVIDER_BRANDS[provider]) +
+        '</span><div><span class="sota-provider-name">' + escapeHtml(providerName(provider)) + '</span>' +
+        '<h2>' + escapeHtml(model.n) + '</h2><code>' + escapeHtml(model.id) + '</code></div></div>' +
+        '<div class="sota-model-meta"><span class="sota-capabilities">' + categories.map(function (category) {
+          return '<span>' + escapeHtml(category) + '</span>';
+        }).join('') + '</span><a href="' + escapeHtml(model.sota.source) +
+        '" target="_blank" rel="noopener noreferrer" title="' + escapeHtml(t('sotaDetail')(categories.join(' / '), model.sota.verifiedAt)) + '">' +
+        t('sotaPageSource') + '</a></div></article></li>';
+    }).join('');
+    sotaList.innerHTML = timeline ? '<ol class="sota-timeline">' + timeline + '</ol>' : '<p>' + t('sotaPageEmpty') + '</p>';
+  }
+
   /* ---------- 渲染 ---------- */
 
   function updateContextSummary() {
@@ -446,7 +597,18 @@
   }
 
   function filteredModels() {
-    var q = state.query.trim().toLowerCase();
+    var terms = (state.query.toLowerCase().match(/image\s+generation(?=\s|$)|\S+/g) || []).map(function (term) {
+      return term.replace(/\s+/g, ' ');
+    });
+    var tagFilters = new Map([['sota', function (model) { return Boolean(model.sota); }]]);
+    Object.entries({
+      badgeOpen: function (model) { return model.traits?.openWeights === true; },
+      badgeChina: function (model) { return model.traits?.china === true; },
+      badgeFree: isFreeModel,
+      badgeImageGeneration: function (model) { return model.imageGeneration === true; }
+    }).forEach(function ([key, matches]) {
+      LANGS.forEach(function (locale) { tagFilters.set(I18N[locale][key].toLowerCase(), matches); });
+    });
     return data.models.filter(function (m) {
       if (state.providers.length && state.providers.indexOf(m.p) === -1) return false;
       if (['openWeights', 'china'].some(function (key) {
@@ -462,10 +624,20 @@
         var bounds = range.split(':').map(Number);
         return typeof m.ctx === 'number' && m.ctx >= bounds[0] && m.ctx < bounds[1];
       })) return false;
-      if (!q) return true;
-      return m.n.toLowerCase().indexOf(q) !== -1 ||
-             m.id.toLowerCase().indexOf(q) !== -1 ||
-             m.p.toLowerCase().indexOf(q) !== -1;
+      if (!terms.length) return true;
+      var fields = [m.n, m.id, m.p, providerName(m.p)].map(function (field) { return field.toLowerCase(); });
+      return terms.every(function (term) {
+        if (tagFilters.has(term)) return tagFilters.get(term)(m);
+        return fields.some(function (field) { return field.includes(term); });
+      });
+    });
+  }
+
+  function isFreeModel(model) {
+    if (model.in !== 0 || model.out !== 0) return false;
+    if (model.imagePricing && model.imagePricing.input !== 0) return false;
+    return [model.cr, model.cw, model.imagePricing?.cachedInput].every(function (price) {
+      return price == null || price === 0;
     });
   }
 
@@ -474,7 +646,7 @@
     saveFilters();
     var models = filteredModels();
 
-    // 按 provider 顺序分组（保持原站顺序）
+    // 按入口分组，再将同厂商的入口排在一起。
     var groups = new Map();
     for (var i = 0; i < models.length; i++) {
       var m = models[i];
@@ -483,21 +655,26 @@
     }
 
     var html = '';
-    groups.forEach(function (items, provider) {
+    orderProviders(data.providers.map(function (provider) { return provider.name; })).forEach(function (provider) {
+      var items = groups.get(provider);
+      if (!items) return;
       if (priceSort.direction !== 'none') items.sort(comparePrices);
       html += '<tr class="models-provider-row"><th scope="rowgroup" colspan="6">' +
         '<a class="models-provider-link" href="?provider=' + encodeURIComponent(provider) + '">' +
-        '<code>' + escapeHtml(provider) + '</code>' + brandIcon(PROVIDER_BRANDS[provider]) + ' ' +
+        providerIdentity(provider) + ' ' +
         '<span class="models-provider-count">' + t('modelsCount')(items.length) + '</span></a></th></tr>';
       for (var j = 0; j < items.length; j++) {
         var d = items[j];
+        var description = lang === 'zh-CN' && d.descriptionZh ? d.descriptionZh : d.description;
         html += '<tr><th scope="row" class="models-model-col">' +
           '<label class="pk-select"><input type="checkbox" data-pk-index="' + data.models.indexOf(d) + '"' + (pkModels.indexOf(d) !== -1 ? ' checked' : '') + ' aria-label="' + escapeHtml(t('pkSelect') + ' · ' + d.p + ' / ' + d.n) + '"><span>PK</span></label>' +
           '<a href="' + escapeHtml(d.source || (ORIGIN + '/models/' + encodeURIComponent(d.p) + '/' + encodeURIComponent(d.id))) + '">' + escapeHtml(d.n) + '</a>' + brandIcon(modelBrand(d)) +
           (d.sota ? ' <a class="sota-badge" href="' + escapeHtml(d.sota.source) + '" target="_blank" rel="noopener noreferrer" title="' + escapeHtml(t('sotaDetail')(d.sota.categories.map(function (key) { return t('sotaCategories')[key]; }).join(' / '), d.sota.verifiedAt)) + '">SOTA</a>' : '') +
           (d.traits && d.traits.openWeights === true ? ' <span class="trait-badge" title="' + escapeHtml(t('openHelp')) + '">' + t('badgeOpen') + '</span>' : '') +
           (d.traits && d.traits.china === true ? ' <span class="trait-badge" title="' + escapeHtml(t('chinaHelp')) + '">' + t('badgeChina') + '</span>' : '') +
-          (d.description ? '<span class="model-info" tabindex="0" role="img" aria-label="' + escapeHtml(d.description) + '">ⓘ<span class="model-info-tooltip" aria-hidden="true">' + escapeHtml(d.description) + '</span></span>' : '') +
+          (isFreeModel(d) ? ' <span class="trait-badge free-badge">' + t('badgeFree') + '</span>' : '') +
+          (d.imageGeneration === true ? ' <span class="trait-badge image-generation-badge">' + t('badgeImageGeneration') + '</span>' : '') +
+          (description ? '<span class="model-info" tabindex="0" role="img" aria-label="' + escapeHtml(description) + '"><span class="model-info-icon" aria-hidden="true">i</span><span class="model-info-tooltip" aria-hidden="true">' + escapeHtml(description) + '</span></span>' : '') +
           '<code>' + escapeHtml(d.id) + '</code>' +
           '</th>' +
           '<td class="data-table-col-num">' + formatContext(d.ctx) + '</td>' +
@@ -513,29 +690,62 @@
     }
 
     els.tbody.innerHTML = html;
+    scheduleCatalogHeader();
     els.count.textContent = t('modelCountSummary')(models.length, data.models.length);
     renderPK();
   }
 
   /* 横向滚动容器会阻止 CSS sticky 跟随页面，按页面滚动同步表头位置。 */
   var catalogTable = document.querySelector('.models-catalog-table');
-  var catalogHead = catalogTable.tHead;
+  var catalogHead = catalogTable?.tHead;
   var headerFrame = null;
+  var pinnedProvider = null;
+  var pinnedProviderOffset = 0;
 
   function pinCatalogHeader() {
     headerFrame = null;
     var bounds = catalogTable.getBoundingClientRect();
-    var offset = Math.max(0, Math.min(-bounds.top, bounds.height - catalogHead.offsetHeight));
+    var headerHeight = catalogHead.getBoundingClientRect().height;
+    var offset = Math.max(0, Math.min(-bounds.top, bounds.height - headerHeight));
     catalogHead.style.transform = 'translateY(' + offset + 'px)';
+    var pinTop = bounds.top + offset + headerHeight;
+    var groups = els.tbody.querySelectorAll('.models-provider-row');
+    var current = null;
+    var shift = 0;
+    var nextTop = bounds.bottom;
+
+    if (offset > 0 && pinTop < bounds.bottom) {
+      for (var row of groups) {
+        var rowTop = row.getBoundingClientRect().top - (row === pinnedProvider ? pinnedProviderOffset : 0);
+        if (rowTop > pinTop) {
+          nextTop = rowTop;
+          break;
+        }
+        current = row;
+        shift = pinTop - rowTop;
+      }
+    }
+    if (pinnedProvider && pinnedProvider !== current) {
+      pinnedProvider.classList.remove('is-pinned');
+      pinnedProvider.style.transform = '';
+    }
+    pinnedProvider = current;
+    pinnedProviderOffset = current ? Math.max(0, shift - Math.max(0, pinTop + current.getBoundingClientRect().height - nextTop)) : 0;
+    if (current) {
+      current.classList.toggle('is-pinned', pinnedProviderOffset > 0);
+      current.style.transform = pinnedProviderOffset > 0 ? 'translateY(' + pinnedProviderOffset + 'px)' : '';
+    }
   }
 
   function scheduleCatalogHeader() {
     if (headerFrame == null) headerFrame = requestAnimationFrame(pinCatalogHeader);
   }
 
-  window.addEventListener('scroll', scheduleCatalogHeader, { passive: true });
-  window.addEventListener('resize', scheduleCatalogHeader);
-  new ResizeObserver(scheduleCatalogHeader).observe(catalogTable);
+  if (catalogTable) {
+    window.addEventListener('scroll', scheduleCatalogHeader, { passive: true });
+    window.addEventListener('resize', scheduleCatalogHeader);
+    new ResizeObserver(scheduleCatalogHeader).observe(catalogTable);
+  }
 
   /* ---------- 模型 PK ---------- */
 
@@ -796,6 +1006,9 @@
       render();
     });
 
+  }
+
+  function bindPreferences() {
     // 太阳／月亮图标在浅色与深色之间切换
     els.themeToggle.addEventListener('click', function () {
       var current = document.documentElement.dataset.theme || 'auto';
@@ -811,28 +1024,142 @@
     });
   }
 
-  function updateProviderSummary() {
-    var summary = document.getElementById('provider-summary');
-    summary.innerHTML = !state.providers.length ? escapeHtml(t('allProviders')) :
-      (state.providers.length === 1 ? brandIcon(PROVIDER_BRANDS[state.providers[0]]) : '') +
-      '<span>' + escapeHtml(state.providers.join(', ')) + '</span>';
-    summary.title = state.providers.join(', ');
-    els.providerFilter.querySelectorAll('input').forEach(function (input) {
-      input.checked = input.value === 'all' ? !state.providers.length : state.providers.indexOf(input.value) !== -1;
+  function bindApiDirectory() {
+    var dialog = document.getElementById('api-dialog');
+    var providerSelect = document.getElementById('api-provider');
+    var search = document.getElementById('api-search');
+    var protocol = document.getElementById('api-protocol');
+    var status = document.getElementById('api-status');
+    var results = document.getElementById('api-results');
+    var sourceLabels = { official: 'apiOfficial', pi: 'apiPi', community: 'apiCommunity' };
+    var protocolLabels = Object.fromEntries(Array.from(protocol.options, function (option) {
+      return [option.value, option.textContent];
+    }));
+    var providers;
+    var selectedProviders = [];
+    var loading = false;
+
+    function isSubsequence(query, value) {
+      var matched = 0;
+      for (var i = 0; i < value.length; i++) {
+        if (value[i] === query[matched] && ++matched === query.length) return true;
+      }
+      return false;
+    }
+
+    function renderApiDirectory() {
+      if (!providers) return;
+      var terms = search.value.toLowerCase().match(/[\p{L}\p{N}]+/gu) || [];
+      var sections = [];
+      providers.forEach(function (provider) {
+        if (selectedProviders.length && !selectedProviders.includes(provider.id)) return;
+        var aliases = [provider.name, provider.nameZh || '', provider.id];
+        if (!terms.every(function (term) {
+          return aliases.some(function (alias) { return isSubsequence(term, alias.toLowerCase()); });
+        })) return;
+        var endpoints = provider.endpoints.filter(function (endpoint) {
+          return !protocol.value || protocol.value === endpoint.protocol;
+        });
+        if (!endpoints.length) return;
+        var billing = provider.billing;
+        var accessNote = provider.accessNote;
+        sections.push('<section class="api-provider"><h3>' + providerIdentity(provider.id) + '</h3>' +
+          (accessNote ? '<p class="api-note">' + escapeHtml(lang === 'zh-CN' ? accessNote.zh : accessNote.en) + '</p>' : '') +
+          (billing ? '<p class="api-note">' + escapeHtml(lang === 'zh-CN' ? billing.zh : billing.en) + ' <a href="' + escapeHtml(billing.source) + '" target="_blank" rel="noopener noreferrer">' + t('apiBilling') + '</a></p>' : '') +
+          endpoints.map(function (endpoint) {
+            return '<div class="api-endpoint"><span>' + escapeHtml(protocolLabels[endpoint.protocol]) + '</span>' +
+              '<div class="api-address"><code>' + escapeHtml(endpoint.baseUrl) + '</code>' +
+              '<button class="api-copy" type="button" data-base-url="' + escapeHtml(endpoint.baseUrl) + '" title="' + t('apiCopy') + '" aria-label="' + t('apiCopy') + '">' +
+              '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8h12v12H8zM16 4H4v12"/></svg></button></div>' +
+              '<a href="' + escapeHtml(endpoint.source) + '" target="_blank" rel="noopener noreferrer">' + t(sourceLabels[endpoint.sourceType]) + '</a></div>';
+          }).join('') + '</section>');
+      });
+      results.innerHTML = sections.join('');
+      status.textContent = sections.length ? '' : t('apiEmpty');
+    }
+
+    document.getElementById('api-open').addEventListener('click', async function () {
+      dialog.showModal();
+      if (loading) return;
+      loading = true;
+      status.textContent = t('apiLoading');
+      try {
+        var directory = await loadProviderDirectory();
+        var ids = new Set(data ? data.providers.map(function (provider) { return provider.name; }) : []);
+        directory.forEach(function (provider) { ids.add(provider.id); });
+        providers = orderProviders(Array.from(ids)).filter(function (id) {
+          return providerDetails.has(id);
+        }).map(function (id) { return providerDetails.get(id); });
+        providerSelect.querySelector('.provider-options').innerHTML =
+          '<label><input type="checkbox" value="all"><span>' + escapeHtml(t('allProviders')) + '</span></label>' +
+          providers.map(function (provider) {
+            var id = escapeHtml(provider.id);
+            return '<label title="' + id + '"><input type="checkbox" value="' + id + '">' +
+              brandIcon(PROVIDER_BRANDS[provider.id]) + '<span>' + escapeHtml(providerName(provider.id)) + '</span></label>';
+          }).join('');
+        updateProviderSummary(providerSelect, 'api-provider-summary', selectedProviders);
+        renderApiDirectory();
+      } catch (error) {
+        providers = null;
+        status.textContent = t('apiError');
+      } finally {
+        loading = false;
+      }
+    });
+    search.addEventListener('input', renderApiDirectory);
+    providerSelect.addEventListener('change', function (event) {
+      selectedProviders = event.target.value === 'all' ? [] :
+        Array.from(providerSelect.querySelectorAll('input:checked'), function (input) { return input.value; }).filter(function (value) { return value !== 'all'; });
+      updateProviderSummary(providerSelect, 'api-provider-summary', selectedProviders);
+      renderApiDirectory();
+    });
+    dialog.addEventListener('click', function (event) {
+      if (!providerSelect.contains(event.target)) providerSelect.open = false;
+    });
+    dialog.addEventListener('cancel', function (event) {
+      if (!providerSelect.open) return;
+      event.preventDefault();
+      providerSelect.open = false;
+      providerSelect.querySelector('summary').focus();
+    });
+    dialog.addEventListener('close', function () { providerSelect.open = false; });
+    protocol.addEventListener('change', renderApiDirectory);
+    results.addEventListener('click', async function (event) {
+      var button = event.target.closest('[data-base-url]');
+      if (!button) return;
+      var feedback;
+      try {
+        await navigator.clipboard.writeText(button.dataset.baseUrl);
+        button.querySelector('path').setAttribute('d', 'm5 12 4 4L19 6');
+        feedback = t('apiCopied');
+      } catch (error) {
+        button.querySelector('path').setAttribute('d', 'M12 5v9m0 4h.01');
+        feedback = t('apiCopyError');
+      }
+      button.title = feedback;
+      button.setAttribute('aria-label', feedback);
+    });
+  }
+
+  function updateProviderSummary(filter = els.providerFilter, summaryId = 'provider-summary', selected = state.providers) {
+    var summary = document.getElementById(summaryId);
+    summary.innerHTML = !selected.length ? escapeHtml(t('allProviders')) :
+      (selected.length === 1 ? brandIcon(PROVIDER_BRANDS[selected[0]]) : '') +
+      '<span>' + escapeHtml(selected.map(providerName).join(', ')) + '</span>';
+    summary.title = selected.map(providerName).join(', ');
+    filter.querySelectorAll('input').forEach(function (input) {
+      input.checked = input.value === 'all' ? !selected.length : selected.includes(input.value);
     });
   }
 
   function buildProviderSelect() {
     var options = '<label><input type="checkbox" name="provider" value="all" checked><span data-i18n="allProviders">' + escapeHtml(t('allProviders')) + '</span></label>';
-    var providers = data.providers.slice().sort(function (a, b) {
-      return Number(favoriteProviders.indexOf(b.name) !== -1) - Number(favoriteProviders.indexOf(a.name) !== -1);
-    });
-    providers.forEach(function (provider) {
-      var favorite = favoriteProviders.indexOf(provider.name) !== -1;
-      var favoriteLabel = t(favorite ? 'unfavoriteProvider' : 'favoriteProvider') + ' · ' + provider.name;
-      options += '<div class="provider-option"><label title="' + escapeHtml(provider.name) + '"><input type="checkbox" name="provider" value="' + escapeHtml(provider.name) + '">' +
-        brandIcon(PROVIDER_BRANDS[provider.name]) + '<span>' + escapeHtml(provider.name) + '</span></label>' +
-        '<button class="provider-favorite" type="button" data-favorite-provider="' + escapeHtml(provider.name) + '" aria-pressed="' + favorite + '" aria-label="' + escapeHtml(favoriteLabel) + '" title="' + escapeHtml(favoriteLabel) + '">' +
+    orderProviders(data.providers.map(function (provider) { return provider.name; }), true).forEach(function (id) {
+      var favorite = favoriteProviders.indexOf(id) !== -1;
+      var favoriteLabel = t(favorite ? 'unfavoriteProvider' : 'favoriteProvider') + ' · ' + providerName(id);
+      options += '<div class="provider-option"><label title="' + escapeHtml(id) + '"><input type="checkbox" name="provider" value="' + escapeHtml(id) + '">' +
+        brandIcon(PROVIDER_BRANDS[id]) + '<span>' + escapeHtml(providerName(id)) + '</span></label>' +
+        '<button class="provider-favorite" type="button" data-favorite-provider="' + escapeHtml(id) + '" aria-pressed="' + favorite + '" aria-label="' + escapeHtml(favoriteLabel) + '" title="' + escapeHtml(favoriteLabel) + '">' +
         '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.5 6.3-.9Z"/></svg></button></div>';
     });
     els.providerFilter.querySelector('.provider-options').innerHTML = options;
@@ -855,6 +1182,10 @@
 
   /* ---------- 启动 ---------- */
 
+  bindPreferences();
+  applyI18n();
+  if (isChangelog) return;
+
   fetch('data.json')
     .then(function (res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -862,6 +1193,10 @@
     })
     .then(function (json) {
       data = json;
+      if (sotaList) {
+        renderSotaPage();
+        return;
+      }
       restoreFavoriteProviders();
       buildProviderSelect();
       restoreFilters();
@@ -873,9 +1208,14 @@
       if (currency !== 'USD') loadExchange(false);
     })
     .catch(function (err) {
+      if (sotaList) {
+        sotaList.textContent = t('loadError') + err.message;
+        return;
+      }
       els.tbody.innerHTML = '<tr><td colspan="6" class="table-empty">' +
         escapeHtml(t('loadError') + err.message) + '</td></tr>';
       els.count.textContent = '—';
     });
-  applyI18n();
+  if (!sotaList) bindApiDirectory();
+  loadProviderDirectory().catch(function () { /* API directory can retry when opened. */ });
 })();

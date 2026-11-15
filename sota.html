@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOTA models · Model Catalog</title>
+  <meta name="description" content="Flagship models from their original providers, newest first.">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // 尽早应用主题与语言，避免闪烁
+    (function () {
+      try {
+        var t = localStorage.getItem('pi-theme');
+        if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+        var lang = localStorage.getItem('pi-lang');
+        if (!lang) lang = /^zh\b|zh-/i.test(navigator.language || '') ? 'zh-CN' : 'en';
+        document.documentElement.lang = lang === 'zh-CN' ? 'zh-CN' : 'en';
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+</head>
+<body>
+  <nav class="sticky-nav">
+    <div class="sticky-nav-inner">
+      <a class="nav-project-name" href="index.html"><img class="nav-project-icon" src="icon.svg" width="32" height="32" alt=""><span data-i18n="h1">Model Catalog</span></a>
+      <div class="sticky-nav-controls">
+        <button class="nav-toggle" id="lang-toggle" type="button" data-i18n-title="langTitle" title="Switch language">中文</button>
+        <span class="sticky-nav-controls-sep" aria-hidden="true">&middot;</span>
+        <button class="nav-toggle theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="theme-moon-mask">
+          <rect width="24" height="24" fill="#fff"></rect>
+          <circle class="theme-toggle-hole" cx="17" cy="7" r="7" fill="#000"></circle>
+        </mask>
+        <circle class="theme-toggle-core" cx="12" cy="12" mask="url(#theme-moon-mask)"></circle>
+        <g class="theme-toggle-rays">
+          <line x1="12" y1="1.6" x2="12" y2="3.8"></line><line x1="12" y1="20.2" x2="12" y2="22.4"></line>
+          <line x1="1.6" y1="12" x2="3.8" y2="12"></line><line x1="20.2" y1="12" x2="22.4" y2="12"></line>
+          <line x1="4.6" y1="4.6" x2="6.2" y2="6.2"></line><line x1="17.8" y1="17.8" x2="19.4" y2="19.4"></line>
+          <line x1="4.6" y1="19.4" x2="6.2" y2="17.8"></line><line x1="17.8" y1="6.2" x2="19.4" y2="4.6"></line>
+        </g>
+      </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content-shell sota-page">
+    <header class="sota-heading">
+      <h1 data-i18n="sotaPage">SOTA models</h1>
+      <p data-i18n="sotaPageDescription">Flagship models from their original providers, newest first.</p>
+    </header>
+    <div id="sota-models"><p role="status" data-i18n="sotaPageLoading">Loading models…</p></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

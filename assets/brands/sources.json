@@ -157,5 +157,13 @@
   },
   "model": {
     "source": "项目自绘：中性模型占位图标"
+  },
+  "zai": {
+    "source": "https://github.com/lobehub/lobe-icons",
+    "download": "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/zai.svg"
+  },
+  "volcengine": {
+    "source": "https://github.com/lobehub/lobe-icons",
+    "download": "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/volcengine-color.svg"
   }
 }

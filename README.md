@@ -6,11 +6,45 @@
 
 ## 数据
 
-最近同步：2026-11-15。pi.dev/models 源站共 1661 个模型，另保留 10 个官方补充条目，合计 1671 个模型、42 个 provider。
+最近同步：2026-11-15。pi.dev/models 源站共 1661 个模型，另保留 145 个官方补充条目，合计 1806 个模型、47 个 provider。
 
-- **1671 个模型**，来自 **42 个 provider**（amazon-bedrock、anthropic、openai、openrouter、vercel-ai-gateway、zai 等）
 - 每个模型包含：显示名、model ID、上下文窗口、输入/输出/缓存读写价格（$/M tokens）
 - 数据提取自原站服务端渲染的 HTML 表格（`reference/pi-models-data.json` 为原始提取，`data.json` 为紧凑版）
+
+`provider-apis.json` 独立维护接入地址。每个提供商包含 `id`（与目录中的 provider ID 对应）、`name`、可选的 `nameZh` 和 `endpoints`。目录和 API 地址共用供应商名称及品牌图标映射。每个端点包含 `protocol`、`baseUrl`、`source` 和 `sourceType`（`official`、`pi` 或 `community`）。填入对应协议的 SDK Base URL，按来源说明核对鉴权、可用模型及区域。带 `{占位符}` 的地址需要替换为自己的配置。
+
+### 智谱 API 与 Coding Plan
+
+国际区使用 **Z.ai API**（`zai-api`）和 **Z.ai Coding Plan**（`zai`），中国区使用 **BigModel API**（`zai-api-cn`）和 **BigModel Coding Plan**（`zai-coding-cn`）。两个按量 API 的 Chat Completions 地址使用各区域域名下的 `/api/paas/v4`，Coding Plan 对应 `/api/coding/paas/v4`。各协议和对应来源可在「API 地址」中查看。
+
+按量模型采用 [Z.ai 国际定价](https://docs.z.ai/guides/overview/pricing)和 [BigModel 中国定价](https://docs.bigmodel.cn/cn/guide/start/pricing)。中国区固定 token 单价以 [2026-11-13 汇率](https://api.frankfurter.dev/v1/2026-11-13?base=USD&symbols=CNY)（1 USD = 6.6719 CNY）换算，分档和媒体专用价格见模型说明。Coding Plan 按额度计费，token 价格栏留空。Z.ai 国际区按量入口当前仅收录官方明确用于标准 API Key 的 Chat Completions 地址。
+
+### 火山引擎方舟
+
+2026-11-15 核对了北京区三个入口。各入口的模型名称、Base URL 和专属鉴权说明见「API 地址」。
+
+| 入口 | 目录 ID | 计费方式 |
+| --- | --- | --- |
+| 按量 API | `volcengine` | 使用方舟按量价格，覆盖文本、图片、视频、3D 和向量化模型。 |
+| Coding Plan | `volcengine-coding-plan` | 个人版 Lite ¥40/月或 ¥120/季，Pro ¥200/月或 ¥600/季。 |
+| Agent Plan | `volcengine-agent-plan` | 个人版 Small ¥40/月、Medium ¥200/月、Large ¥500/月、Max ¥1,000/月。视频模型需要 Large 或 Max。 |
+
+模型 ID 和套餐可用范围见[按量模型目录](https://docs.volcengine.com/docs/ark/model-list?lang=zh)、[Coding Plan 配置](https://console.volcengine.com/ark/region:cn-beijing/docs/coding-plan-personal-get-started#model-configuration)和[Agent Plan 支持模型](https://console.volcengine.com/ark/region:cn-beijing/docs/agent-plan-personal-plan-overview#supported-models-harness)。套餐价格见[方舟官方价表](https://console.volcengine.com/ark/region:cn-beijing/docs/model-pricing)。套餐模型使用额度，目录的 token 单价栏留空。`ark-code-latest` 是由控制台配置的路由。
+
+以下为部分豆包模型的[常规在线推理价格](https://console.volcengine.com/ark/region:cn-beijing/docs/model-pricing#aa1874cf)，单位为人民币／百万 tokens。
+
+| 模型 | 非音频输入 | 输出 | 非音频缓存命中 |
+| --- | ---: | ---: | ---: |
+| Doubao Seed 2.1 Pro | 6.00 | 30.00 | 1.20 |
+| Doubao Seed 2.1 Lite | 0.80 | 2.70 | 0.16 |
+| Doubao Seed 2.1 Turbo | 3.00 | 15.00 | 0.60 |
+| Doubao Seed Evolving | 6.00 | 30.00 | 1.20 |
+
+目录采用常规在线推理定价，固定单价以 [Frankfurter 2026-11-13 汇率](https://api.frankfurter.dev/v1/2026-11-13?base=USD&symbols=CNY)（1 USD = 6.6719 CNY）换算为美元。输入长度分档、时段变化、媒体专用价格和即将下线状态见各行说明。Lite 的音频输入和音频缓存命中分别为 12.00 和 2.40 元／百万 tokens。上表四个模型的缓存存储费为 0.017 元／百万 tokens／小时，目录的缓存写入栏留空。
+
+### DeepSeek 官方模型
+
+截至 2026-11-15，DeepSeek 官方直连提供 `deepseek-flash`（V4.1 Flash 1017）和 `deepseek-v4-pro`（V4 Pro 0813）。[模型接口文档](https://api-docs.deepseek.com/api/list-models/)给出的上下文为 1,048,576 tokens。旧 ID `deepseek-v4-flash` 和 `deepseek-v4-flash-vision-exp` 的请求均由 `deepseek-flash` 处理。搜索、OCR 和语音按工具 API 计费。详见[官方定价](https://api-docs.deepseek.com/quick_start/pricing/)。
 
 ### 小米与 DeepSeek 缓存价格核对（2026-10-20）
 
@@ -39,22 +73,25 @@ npm install
 npm run dev
 ```
 
-打开 http://localhost:3456，介绍页为 http://localhost:3456/about.html。保存 HTML、CSS、JavaScript、`data.json` 或 `assets/` 下的资源后，浏览器自动更新；CSS 修改直接注入，其他文件修改触发页面刷新。按 `Ctrl+C` 停止服务。
+打开 http://localhost:3456，介绍页为 http://localhost:3456/about.html。保存 HTML、CSS、JavaScript、`data.json`、`provider-apis.json` 或 `assets/` 下的资源后，浏览器自动更新；CSS 修改直接注入，其他文件修改触发页面刷新。按 `Ctrl+C` 停止服务。
 
 开发服务使用 BrowserSync，配置位于 `bs-config.cjs`；默认端口为 3456，占用时实际地址以终端输出为准。发布时仍直接使用静态文件，无需上传 `node_modules/` 或运行开发服务。
 
 ## 功能
 
+- **API 地址**：从目录顶部打开，可同时选择多个供应商，也可按名称或目录 ID 模糊搜索。供应商选择、搜索和协议筛选可以组合使用。支持复制 OpenAI Chat Completions、Anthropic Messages、OpenAI Responses 和 Google Generative AI 的 Base URL，每个端点附有来源。
 - **模型 PK**：仅桌面端支持，默认关闭；点击“开始 PK”后显示模型勾选框，支持跨供应商和筛选结果选择，点击“退出 PK”清空并退出；底部已选栏支持移除、清空，选择至少两个后可打开横向对比面板。对比供应商、模型 ID、上下文、输入／输出及缓存读写价格、SOTA、开源和国产属性；沿用当前货币，缓存价格最多四位小数。移动端隐藏全部 PK 功能，缩小至移动端宽度时自动退出并清空选择；对比面板支持关闭按钮和 Esc；重置筛选保留 PK 选择，刷新页面后清空选择。
 
-- **名称搜索**：实时匹配模型名 / model ID / provider
+- **模型搜索**：支持模型名称、模型 ID、供应商和中英文标签。用空格组合关键词，结果须同时满足所有条件，关键词顺序不限。例如 `Seedream 生图` 或 `DeepSeek 开源`。
 - **Provider 筛选**：下拉复选，多个提供商取并集；同步重复 URL 参数 `?provider=…&provider=…`，兼容原有单选链接和本地记录；选择“所有提供商”清空选择。
 - **SOTA 筛选**：按通用、推理、编程、图像等能力人工标记当前旗舰；可选择不限／仅 SOTA／未标记，与其他筛选联动。模型旁的 SOTA 标识可查看能力、核对日期，并点击访问官方依据。
+- **[SOTA 模型页](sota.html)**：以发布日期倒序展示目录中的原厂旗舰及官方依据。第三方分发入口不收录，同一厂商的地区与套餐入口不重复展示同一模型。
+- **免费标记**：输入、输出单价均明确为零，且已记录的缓存和图片单价也为零时，模型名称旁显示「免费」。
 - **价格排序**：点击输入、输出、缓存读、缓存写价格表头，在默认／正序／反序之间循环；各提供商组内排序，未知价格始终置后，同价保持原顺序；生图输入和缓存读按文本价格排序
 - **价格货币**：默认美元，可切换人民币、港币、欧元、日元、韩元；所有输入、输出、缓存及图片价格统一换算，原始美元数据保持不变
 - **汇率与缓存**：切换非美元货币时从 Frankfurter 一次查询最新 USD 对 CNY、HKD、EUR、JPY、KRW 的汇率（按日更新），显示汇率日期，并用 localStorage 缓存 1 小时；支持手动刷新，查询失败时标注使用旧缓存，无缓存时继续显示美元
 - **Reset**：一键清空全部筛选
-- **实时计数**：`N / 1671` 显示当前匹配数
+- **实时计数**：显示当前匹配数与目录总数
 - **主题切换**：右上角太阳／月亮图标切换浅色与深色，localStorage 记忆；首次访问跟随系统主题
 - **分组表格**：按 provider 分组、行悬停高亮、数字右对齐、窄屏横向滚动
 
@@ -70,7 +107,8 @@ npm run dev
 ├── index.html      # 页面结构（导航 / 卡片 / 表格 / 页脚）
 ├── styles.css      # 设计 token + 组件样式（含暗色主题）
 ├── app.js          # 数据加载、筛选、渲染、主题切换
-├── data.json       # 1671 个模型的紧凑数据
+├── data.json       # 模型目录数据
+├── provider-apis.json # 厂商 API 地址与来源
 └── reference/      # 提取过程中间产物（快照、DOM 样式、原始数据、截图）
 ```
 
@@ -81,15 +119,11 @@ npm run dev
 - 模型名链接指向原站对应详情页（克隆站不含详情路由）
 - 未复刻：导航 logo 右键菜单（Copy/Download SVG、Press Kit）、移动端 burger 抽屉菜单
 
-## SOTA 标记（2026-11-13 核对）
+## SOTA 标记（2026-11-15 核对）
 
 本项目将 SOTA 用作「模型厂商在相应能力方向的当前旗舰」标记，依据官方发布与模型说明人工维护，并参考 [AIHOT 综合榜](https://aihot.news/leaderboard)及[科研榜](https://aihot.news/leaderboard/category/reasoning)交叉检查型号更替。它不表示跨厂商榜单第一，也不把所有上榜模型自动标为 SOTA；榜单评测覆盖和更新时间不同，旧型号仍可能留在榜上。未标记可能表示未核实、目录未收录当前旗舰，或入口映射尚不明确。
 
-`data.json` 中的 `sota` 对象包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 和官方 `source`。本次扫描全部 1659 条目录记录，最终标记 1671 个模型入口，覆盖 42 个 provider；新增 80 个标记、移除 80 个旧标记、重新核对 55 个存量标记。逐型号依据及未覆盖情况见 [本次核对记录](docs/sota-review-2026-11-13.md)。模型数量、价格、上下文、开源与国产属性未随本次 SOTA 核对修改。
-
-本轮主要更替：Claude Fable 5.2、Gemini 4 Carbon、Kimi K3.1 Pro、DeepSeek V4.1 Flash 1017、MiniMax M3.1 Flash、Ling 3.1 Flash 1019；保留 GPT-6 Astra、Grok 4.7、GLM-5.3、Muse Wonder、Mistral Large 4、MiMo V2.6 Pro，并补充已核实的同型号入口及腾讯 Hy4、Step 5 Preview、Inkling 2 Small、Reflection Beam、Command A+。
-
-Qwen4-Max-Preview 与 GPT Image 2.6 已有官方发布，但当前目录尚未收录，本次移除 Qwen3.8 Max 和 GPT Image 2.5 的旧旗舰标记，暂不扩充目录。因此当前没有图像 SOTA 入口，不表示没有图像旗舰模型。Cerebras 与 Groq 现有目录也未收录本轮已核实的旗舰型号。
+`data.json` 中的 `sota` 对象包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 和官方 `source`。当前标记 167 个模型入口，覆盖 44 个 provider。新增型号、同型号映射和待核实范围见 [2026-11-15 核对记录](docs/sota-review-2026-11-15.md)。
 
 聚合平台与区域入口仅继承已核实的同型号标记。固定快照及明确的同型号批处理入口可一并标记；MiMo UltraSpeed 与 Kimi Highspeed 有官方同能力说明。未确认映射的 Prime、Pro、Fast、免费变体和动态 latest 路由不自动继承；未获独立证据的普通别名不自动等同最新日期快照。
 
@@ -134,7 +168,7 @@ OpenAI 分组收录 10 个 GPT 生图型号，包含通用别名及带日期的�
 
 筛选条件（名称、提供商、上下文多选、SOTA、开源、国产）、价格货币和价格排序自动保存在浏览器本地，刷新后恢复。点击“重置”会清除筛选记录并恢复默认美元和默认排序，不清除汇率缓存、语言或主题设置。带 `?provider=…` 的链接优先采用链接指定的提供商。
 
-厂商筛选弹框支持星标收藏：收藏厂商置顶，各组保持目录原顺序；收藏独立保存在浏览器本地，刷新和重置筛选不会清除。再次点击星标取消收藏。
+模型列表、厂商筛选和 API 地址将同一厂商的地区及套餐入口排在一起。各入口可独立筛选和收藏。厂商筛选弹框中，含收藏入口的厂商分组整体置顶；收藏保存在浏览器本地。
 
 ## 项目介绍页
 
