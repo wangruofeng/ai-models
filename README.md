@@ -6,7 +6,7 @@
 
 ## 数据
 
-最近同步：2026-11-15。pi.dev/models 源站共 1661 个模型，另保留 145 个官方补充条目，合计 1806 个模型、47 个 provider。
+最近同步：2026-11-16。pi.dev/models 源站共 1661 个模型，另保留 145 个官方补充条目，合计 1806 个模型、47 个 provider。
 
 - 每个模型包含：显示名、model ID、上下文窗口、输入/输出/缓存读写价格（$/M tokens）
 - 数据提取自原站服务端渲染的 HTML 表格（`reference/pi-models-data.json` 为原始提取，`data.json` 为紧凑版）
