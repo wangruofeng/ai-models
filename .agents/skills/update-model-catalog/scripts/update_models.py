@@ -16,10 +16,12 @@ ROOT = Path(__file__).resolve().parents[4]
 FIELDS = ['context', 'input', 'output', 'cacheRead', 'cacheWrite']
 
 # DeepSeek 未单独公布缓存写入价。上下文采用官方 /models 文档的精确值。
+# Gemini 4 Neon 仅支持隐式缓存、无缓存写入价（priceNote 已人工核实，源站 0 为误标）。
 # 条目被源站下架后此处会残留，同步时打印警告提醒清理。
 MANUAL_OVERRIDES = {
     ('deepseek', 'deepseek-v4-pro'): {'ctx': 1048576, 'cw': None},
     ('deepseek', 'deepseek-flash'): {'ctx': 1048576, 'cw': None},
+    ('google', 'gemini-4-neon'): {'cw': None},
 }
 SUBSCRIPTION_PROVIDERS = {'zai', 'zai-coding-cn'}
 
