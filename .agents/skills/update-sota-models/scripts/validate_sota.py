@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""只读检查 SOTA 更新范围、格式和日期，输出标记数量。"""
+"""只读检查 SOTA 与发布日期更新范围、格式和日期，输出标记数量。"""
 import argparse
 import datetime
 import json
@@ -20,14 +20,29 @@ def validate(before, after, date):
     counts = dict(added=0, removed=0, updated=0, unchanged=0)
     seen, providers = set(), set()
     total = 0
+    release_updated = 0
+    release_missing = 0
     for a, b in zip(old, new):
         key = (b['p'], b['id'])
         if key in seen:
             raise ValueError(f'重复模型：{key}')
         seen.add(key)
-        if {k: v for k, v in a.items() if k != 'sota'} != {
-            k: v for k, v in b.items() if k != 'sota'}:
-            raise ValueError(f'非 sota 字段或模型顺序发生变化：{key}')
+        if {k: v for k, v in a.items() if k not in {'sota', 'release'}} != {
+            k: v for k, v in b.items() if k not in {'sota', 'release'}}:
+            raise ValueError(f'非 sota/release 字段或模型顺序发生变化：{key}')
+        if a.get('release') != b.get('release'):
+            release_updated += 1
+        if 'release' in b:
+            release = b['release']
+            if not isinstance(release, dict):
+                raise ValueError(f'release 须为对象：{key}')
+            value = release.get('date', '')
+            if not isinstance(value, str) or len(value) not in (7, 10):
+                raise ValueError(f'发布日期格式无效：{key}')
+            datetime.date.fromisoformat(value + '-01' if len(value) == 7 else value)
+            source = urlparse(release.get('source', ''))
+            if source.scheme != 'https' or not source.netloc:
+                raise ValueError(f'发布日期来源无效：{key}')
         if 'sota' in b:
             s = b['sota']
             if not isinstance(s, dict):
@@ -45,6 +60,8 @@ def validate(before, after, date):
                 raise ValueError(f'来源 URL 无效：{key}')
             if a.get('sota') != s and verified != date:
                 raise ValueError(f'变更标记须填写本轮日期：{key}')
+            if not b.get('release'):
+                release_missing += 1
             total += 1
             providers.add(b['p'])
         was, now = 'sota' in a, 'sota' in b
@@ -52,7 +69,7 @@ def validate(before, after, date):
                 'removed' if was and not now else
                 'updated' if a.get('sota') != b.get('sota') else 'unchanged')
         counts[kind] += 1
-    return dict(models=len(new), sota=total, providers=len(providers), **counts)
+    return dict(models=len(new), sota=total, providers=len(providers), release_updated=release_updated, sota_release_missing=release_missing, **counts)
 
 
 def main():

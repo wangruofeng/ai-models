@@ -126,7 +126,7 @@ def main():
     previous = keyed(old['models'])
     for model in models:
         prior = previous.get((model['p'], model['id']), {})
-        for field in ('sota', 'traits', 'imageGeneration', 'release'):
+        for field in ('sota', 'traits', 'imageGeneration', 'release', 'priceNote'):
             if field in prior:
                 model[field] = prior[field]
         model.update(MANUAL_OVERRIDES.get((model['p'], model['id']), {}))

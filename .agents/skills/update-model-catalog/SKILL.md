@@ -20,6 +20,8 @@ git diff --check
 
 ## 数据约束
 
+- `priceNote` 为官方核对的中英文价格条件（`zh`／`en`／`source`／`verifiedAt`），同步按精确 `(provider, id)` 保留；到期优惠须重新查官方价格，不凭说明自动覆盖数字。
+
 - `data.json` 是页面实际消费的数据；`reference/pi-models-data.json` 是原始提取快照，`reference/` 已被 Git 忽略，不强制提交。
 - 模型以 `(provider, id)` 唯一标识；保持源站 provider 和模型顺序。源站移除的普通条目随同步移除。
 - 现有带 `source` 的条目属于官方补充数据，必须完整保留，包括 `imagePricing`、`verifiedAt`、`null` 等字段。脚本遇到源站同 ID 条目会停止，先比较双方数据再决定如何合并，不自动覆盖。

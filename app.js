@@ -74,11 +74,16 @@
       pkTitle: 'Model PK',
       pkSelect: 'Select for PK',
       pkStart: 'View comparison',
+      pkShare: 'Share comparison',
+      pkShared: 'Comparison link copied',
+      pkShareFallback: 'Copy this comparison link:',
       pkEnter: 'Start PK',
       pkExit: 'Exit PK',
       pkClear: 'Clear',
       pkClose: 'Close',
       pkRemove: 'Remove',
+      pkRelease: 'Release date',
+      pkPriceNote: 'Pricing notes',
       pkSelected: function (n) { return n + ' selected'; },
       filterProvider: 'Filter by provider',
       favoriteProvider: 'Favorite provider',
@@ -102,7 +107,7 @@
       sotaHelp: 'Manually verified flagship models by capability; not a cross-vendor ranking. Unmarked models may be unverified.',
       sotaCategories: { general: 'General', reasoning: 'Reasoning', coding: 'Coding', image: 'Image' },
       sotaPage: 'SOTA models',
-      sotaPageDescription: 'Flagship models from their original providers, newest first.',
+      sotaPageDescription: 'Flagship models by developer, newest first.',
       sotaPageSource: 'Official source',
       sotaPageReleaseUnknown: 'Release date unknown',
       sotaPageLoading: 'Loading models…',
@@ -169,11 +174,16 @@
       pkTitle: '模型 PK',
       pkSelect: '加入 PK',
       pkStart: '查看对比',
+      pkShare: '分享对比',
+      pkShared: '已复制对比链接',
+      pkShareFallback: '请复制此对比链接：',
       pkEnter: '开始 PK',
       pkExit: '退出 PK',
       pkClear: '清空',
       pkClose: '关闭',
       pkRemove: '移除',
+      pkRelease: '发布时间',
+      pkPriceNote: '价格说明',
       pkSelected: function (n) { return '已选 ' + n + ' 个模型'; },
       filterProvider: '按提供商筛选',
       favoriteProvider: '收藏厂商',
@@ -197,7 +207,7 @@
       sotaHelp: '按主要能力人工核实的供应商旗舰，不代表跨厂商排名；未标记也可能是尚未核实。',
       sotaCategories: { general: '通用', reasoning: '推理', coding: '编程', image: '图像' },
       sotaPage: 'SOTA 模型',
-      sotaPageDescription: '原厂旗舰模型，按发布日期从新到旧排列。',
+      sotaPageDescription: '按研发方汇总当前旗舰模型，按发布日期从新到旧排列。',
       sotaPageSource: '官方依据',
       sotaPageReleaseUnknown: '发布日期未知',
       sotaPageLoading: '正在读取模型…',
@@ -564,6 +574,12 @@
       var models = groups.get(provider);
       if (!models.has(model.id) || model.p === provider) models.set(model.id, model);
     });
+    // 原厂按量入口尚未入库时，仅用已核实的精确型号代表研发方，不展示分发商重复卡片。
+    var representatives = [{ provider: 'qwen', name: 'Qwen', brand: 'qwen', p: 'openrouter', id: 'qwen/qwen4-max' }];
+    representatives.forEach(function (entry) {
+      var model = data.models.find(function (m) { return m.p === entry.p && m.id === entry.id && m.sota; });
+      if (model && !groups.has(entry.provider)) groups.set(entry.provider, new Map([[model.id, model]]));
+    });
     var entries = [];
     groups.forEach(function (models, provider) {
       models.forEach(function (model) { entries.push({ provider: provider, model: model }); });
@@ -573,13 +589,14 @@
     });
     var timeline = entries.map(function ({ provider, model }) {
       var release = model.release;
+      var representative = representatives.find(function (entry) { return entry.provider === provider; });
       var categories = model.sota.categories.map(function (key) { return t('sotaCategories')[key]; });
       return '<li class="sota-event"><p class="sota-release">' +
         (release ? '<a href="' + escapeHtml(release.source) + '" target="_blank" rel="noopener noreferrer"><time datetime="' +
           escapeHtml(release.date) + '">' + escapeHtml(release.date) + '</time></a>' : t('sotaPageReleaseUnknown')) +
         '</p><article class="sota-card surface-panel" data-provider="' + escapeHtml(provider) + '">' +
-        '<div class="sota-model-header"><span class="sota-provider-icon">' + brandIcon(PROVIDER_BRANDS[provider]) +
-        '</span><div><span class="sota-provider-name">' + escapeHtml(providerName(provider)) + '</span>' +
+        '<div class="sota-model-header"><span class="sota-provider-icon">' + brandIcon(representative ? representative.brand : PROVIDER_BRANDS[provider]) +
+        '</span><div><span class="sota-provider-name">' + escapeHtml(representative ? representative.name : providerName(provider)) + '</span>' +
         '<h2>' + escapeHtml(model.n) + '</h2><code>' + escapeHtml(model.id) + '</code></div></div>' +
         '<div class="sota-model-meta"><span class="sota-capabilities">' + categories.map(function (category) {
           return '<span>' + escapeHtml(category) + '</span>';
@@ -666,6 +683,7 @@
       for (var j = 0; j < items.length; j++) {
         var d = items[j];
         var description = lang === 'zh-CN' && d.descriptionZh ? d.descriptionZh : d.description;
+        if (d.priceNote) description = (description ? description + '\n' : '') + d.priceNote[lang === 'zh-CN' ? 'zh' : 'en'];
         html += '<tr><th scope="row" class="models-model-col">' +
           '<label class="pk-select"><input type="checkbox" data-pk-index="' + data.models.indexOf(d) + '"' + (pkModels.indexOf(d) !== -1 ? ' checked' : '') + ' aria-label="' + escapeHtml(t('pkSelect') + ' · ' + d.p + ' / ' + d.n) + '"><span>PK</span></label>' +
           '<a href="' + escapeHtml(d.source || (ORIGIN + '/models/' + encodeURIComponent(d.p) + '/' + encodeURIComponent(d.id))) + '">' + escapeHtml(d.n) + '</a>' + brandIcon(modelBrand(d)) +
@@ -756,6 +774,7 @@
     toggle.textContent = t(pkMode ? 'pkExit' : 'pkEnter');
     toggle.setAttribute('aria-pressed', String(pkMode));
     document.body.classList.toggle('has-pk', pkMode);
+    document.getElementById('pk-share-feedback').hidden = true;
     document.getElementById('pk-count').textContent = t('pkSelected')(pkModels.length);
     document.getElementById('pk-start').disabled = pkModels.length < 2;
     document.getElementById('pk-selected').innerHTML = pkModels.map(function (model, index) {
@@ -783,6 +802,9 @@
     var rows = [
       [t('filterProvider'), function (m) { return escapeHtml(m.p); }],
       ['Model ID', function (m) { return '<code>' + escapeHtml(m.id) + '</code>'; }],
+      [t('pkRelease'), function (m) {
+        return m.release ? '<a href="' + escapeHtml(m.release.source) + '" target="_blank" rel="noopener noreferrer"><time datetime="' + escapeHtml(m.release.date) + '">' + escapeHtml(m.release.date) + '</time></a>' : '—';
+      }],
       [t('thContext'), function (m) { return formatContext(m.ctx); }],
       [priceLabel('thInput'), function (m) { return price(m, 'in'); }],
       [priceLabel('thOutput'), function (m) { return price(m, 'out'); }],
@@ -792,8 +814,15 @@
       [t('filterOpen'), function (m) { return trait(m, 'openWeights'); }],
       [t('filterChina'), function (m) { return trait(m, 'china'); }]
     ];
+    if (pkModels.some(function (m) { return m.priceNote; })) {
+      rows.splice(8, 0, [t('pkPriceNote'), function (m) {
+        if (!m.priceNote) return '—';
+        return '<span class="pk-price-note">' + escapeHtml(m.priceNote[lang === 'zh-CN' ? 'zh' : 'en']) + ' <a href="' + escapeHtml(m.priceNote.source) + '" target="_blank" rel="noopener noreferrer">' + t('apiOfficial') + '</a></span>';
+      }]);
+    }
     document.getElementById('pk-table').innerHTML = '<caption class="visually-hidden">' + t('pkTitle') + '</caption><thead><tr><th scope="col">' + t('thModel') + '</th>' + pkModels.map(function (m, index) {
-      return '<th scope="col">' + escapeHtml(m.n) + '<br><button class="text-control" type="button" data-pk-remove="' + index + '" aria-label="' + escapeHtml(t('pkRemove') + ' · ' + m.p + ' / ' + m.n) + '">' + t('pkRemove') + '</button></th>';
+      var badge = m.sota ? '<span class="pk-sota-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 14.8 9.2 21.5 12 14.8 14.8 12 21.5 9.2 14.8 2.5 12 9.2 9.2Z"/><path d="M12 7.5v9M7.5 12h9"/></svg>SOTA</span>' : '';
+      return '<th scope="col"' + (m.sota ? ' class="pk-sota-column"' : '') + '><div class="pk-model-heading"><span class="pk-model-name">' + escapeHtml(m.n) + '</span>' + badge + '<button class="pk-remove" type="button" data-pk-remove="' + index + '" title="' + escapeHtml(t('pkRemove') + ' · ' + m.n) + '" aria-label="' + escapeHtml(t('pkRemove') + ' · ' + m.p + ' / ' + m.n) + '"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></div></th>';
     }).join('') + '</tr></thead><tbody>' + rows.map(function (row) {
       return '<tr><th scope="row">' + escapeHtml(row[0]) + '</th>' + pkModels.map(function (m) { return '<td>' + row[1](m) + '</td>'; }).join('') + '</tr>';
     }).join('') + '</tbody>';
@@ -877,10 +906,40 @@
       renderPKTable();
       pkDialog.showModal();
     });
+    document.getElementById('pk-share').addEventListener('click', async function () {
+      var url = new URL(window.location.href);
+      url.searchParams.delete('pk');
+      pkModels.forEach(function (model) {
+        url.searchParams.append('pk', JSON.stringify([model.p, model.id]));
+      });
+      var feedback = document.getElementById('pk-share-feedback');
+      feedback.hidden = false;
+      try {
+        await navigator.clipboard.writeText(url.href);
+        feedback.textContent = t('pkShared');
+      } catch (err) {
+        feedback.textContent = t('pkShareFallback');
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.readOnly = true;
+        input.value = url.href;
+        input.setAttribute('aria-label', t('pkShare'));
+        feedback.appendChild(input);
+        input.focus();
+        input.select();
+      }
+    });
     document.getElementById('pk-close').addEventListener('click', function () { pkDialog.close(); });
     document.getElementById('pk-clear').addEventListener('click', function () {
       pkModels = [];
       render();
+    });
+    els.tbody.addEventListener('click', function (event) {
+      if (!pkMode || pkMobile.matches) return;
+      if (event.target.closest('a, button, input, label, [tabindex]')) return;
+      var row = event.target.closest('tr');
+      var input = row && row.querySelector('[data-pk-index]');
+      if (input) input.click();
     });
     els.tbody.addEventListener('change', function (event) {
       var input = event.target.closest('[data-pk-index]');
@@ -989,6 +1048,20 @@
     });
 
     document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && pkMode && (!document.querySelector('dialog[open]') || pkDialog.open)) {
+        event.preventDefault();
+        exitPK();
+        document.getElementById('pk-toggle').focus();
+        return;
+      }
+      if (event.code === 'KeyP' && event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+        if (event.repeat || event.isComposing || pkMobile.matches) return;
+        if (event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return;
+        if (document.querySelector('dialog[open]') && !pkDialog.open) return;
+        event.preventDefault();
+        document.getElementById('pk-toggle').click();
+        if (!pkMode) document.getElementById('pk-toggle').focus();
+      }
       if (event.key === 'Escape' && els.providerFilter.open) {
         els.providerFilter.open = false;
         els.providerFilter.querySelector('summary').focus();
@@ -1174,6 +1247,15 @@
 
   function readUrlState() {
     var params = new URL(window.location.href).searchParams;
+    params.getAll('pk').forEach(function (value) {
+      try {
+        var key = JSON.parse(value);
+        if (!Array.isArray(key) || key.length !== 2) return;
+        var model = data.models.find(function (item) { return item.p === key[0] && item.id === key[1]; });
+        if (model && pkModels.indexOf(model) === -1) pkModels.push(model);
+      } catch (err) { /* 忽略无效的分享参数 */ }
+    });
+    if (pkModels.length >= 2 && !pkMobile.matches) pkMode = true;
     if (params.has('provider')) {
       var providers = params.getAll('provider');
       state.providers = data.providers.map(function (provider) { return provider.name; }).filter(function (name) { return providers.indexOf(name) !== -1; });
@@ -1205,6 +1287,10 @@
       syncUrl();
       bindEvents();
       render();
+      if (pkMode && pkModels.length >= 2) {
+        renderPKTable();
+        document.getElementById('pk-dialog').showModal();
+      }
       if (currency !== 'USD') loadExchange(false);
     })
     .catch(function (err) {

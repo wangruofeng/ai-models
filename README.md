@@ -6,7 +6,10 @@
 
 ## 数据
 
-最近同步：2026-11-19。pi.dev/models 源站共 1680 个模型，另保留 145 个官方补充条目，合计 1825 个模型、47 个 provider。
+最近同步：2026-11-19。pi.dev/models 源站共 1680 个模型，另保留 146 个官方补充条目，合计 1826 个模型、47 个 provider。
+
+
+Gemini 4 Neon 尚未被本次 Pi 快照收录，已根据 [Google 2026-11-18 官方公告](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/)补充到 Google 分组（`gemini-4-neon`）：上下文 100 万 tokens，输入／输出／缓存读取分别为 $3／$15／$0.15 每百万 tokens；缓存写入价格未公布，保留 `null`。核对日期为 2026-11-19。
 
 - 每个模型包含：显示名、model ID、上下文窗口、输入/输出/缓存读写价格（$/M tokens）
 - 数据提取自原站服务端渲染的 HTML 表格（`reference/pi-models-data.json` 为原始提取，`data.json` 为紧凑版）
@@ -60,6 +63,12 @@
 
 来源：[小米按量计费](https://mimo.mi.com/docs/zh-CN/price/pay-as-you-go)、[DeepSeek 中文定价](https://api-docs.deepseek.com/zh-cn/quick_start/pricing/)、[DeepSeek 美元定价](https://api-docs.deepseek.com/quick_start/pricing/)。小米采用海外实时推理价。DeepSeek 的 `data.json` 沿用高峰时段价格，空闲时段为半价；北京时间工作日（中国法定节假日除外）9:00–12:00、14:00–18:00 为高峰时段，其余为空闲时段。缓存未命中的输入价属于普通输入价格，不能作为单独的缓存写入价。原始 Pi 快照保留原样，以上为官方核对后的本地修正。
 
+### Google Gemini 4 价格说明（2026-11-19 核对）
+
+Google 直连 Carbon、Argon 的 Standard 付费档优惠持续至 2026-11-30（含当天），输入／输出／缓存读取为 $2／$10／$0.10；2026-12-01 起为 $4／$20／$0.20，单位为美元／百万 tokens。Neon 当前为 $3／$15／$0.15，Hydrogen 为 $1.50／$7.50／$0.075。输出含思考 tokens，四款仅支持隐式缓存，缓存读取单价不等于写入或存储费。以上不套用第三方供应商或 Batch／Flex／Priority 档位。[Google 官方定价](https://aistudio.google.com/docs/pricing)。
+
+模型目录的信息提示及 PK 的「价格说明」行读取 `priceNote`，目录同步保留该字段；优惠到期后需重新核对实际数字。
+
 ## 部署
 
 Cloudflare Pages 直接连接 GitHub 仓库，推送到 `main` 后自动部署。框架预设为「无」，构建命令留空，构建输出目录为 `.`，无需安装依赖。正式域名为 `ai-models.wangruofeng007.com`。GitHub Pages 已停用。
@@ -85,7 +94,8 @@ npm run dev
 - **模型搜索**：支持模型名称、模型 ID、供应商和中英文标签。用空格组合关键词，结果须同时满足所有条件，关键词顺序不限。例如 `Seedream 生图` 或 `DeepSeek 开源`。
 - **Provider 筛选**：下拉复选，多个提供商取并集；同步重复 URL 参数 `?provider=…&provider=…`，兼容原有单选链接和本地记录；选择“所有提供商”清空选择。
 - **SOTA 筛选**：按通用、推理、编程、图像等能力人工标记当前旗舰；可选择不限／仅 SOTA／未标记，与其他筛选联动。模型旁的 SOTA 标识可查看能力、核对日期，并点击访问官方依据。
-- **[SOTA 模型页](sota.html)**：以发布日期倒序展示目录中的原厂旗舰及官方依据。第三方分发入口不收录，同一厂商的地区与套餐入口不重复展示同一模型。
+- **[SOTA 模型页](sota.html)**：以发布日期倒序展示目录中的原厂旗舰及官方依据。优先使用原厂入口；原厂型号缺失时，可由已核实的精确入口代表研发方展示一次，同一厂商的地区、套餐及分发入口不重复展示同一模型。
+- **模型 PK**：桌面端点击整行选中模型，比较发布时间、上下文与价格说明；图标按钮复制分享链接，打开后恢复对比，价格读取当前目录。`Alt + P` 切换 PK，`Esc` 退出；移动端暂不展示 PK。
 - **免费标记**：输入、输出单价均明确为零，且已记录的缓存和图片单价也为零时，模型名称旁显示「免费」。
 - **价格排序**：点击输入、输出、缓存读、缓存写价格表头，在默认／正序／反序之间循环；各提供商组内排序，未知价格始终置后，同价保持原顺序；生图输入和缓存读按文本价格排序
 - **价格货币**：默认美元，可切换人民币、港币、欧元、日元、韩元；所有输入、输出、缓存及图片价格统一换算，原始美元数据保持不变
@@ -119,19 +129,21 @@ npm run dev
 - 模型名链接指向原站对应详情页（克隆站不含详情路由）
 - 未复刻：导航 logo 右键菜单（Copy/Download SVG、Press Kit）、移动端 burger 抽屉菜单
 
-## SOTA 标记（2026-11-15 核对）
+## SOTA 标记（2026-11-19 部分复核）
 
 本项目将 SOTA 用作「模型厂商在相应能力方向的当前旗舰」标记，依据官方发布与模型说明人工维护，并参考 [AIHOT 综合榜](https://aihot.news/leaderboard)及[科研榜](https://aihot.news/leaderboard/category/reasoning)交叉检查型号更替。它不表示跨厂商榜单第一，也不把所有上榜模型自动标为 SOTA；榜单评测覆盖和更新时间不同，旧型号仍可能留在榜上。未标记可能表示未核实、目录未收录当前旗舰，或入口映射尚不明确。
 
-`data.json` 中的 `sota` 对象包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 和官方 `source`。当前标记 167 个模型入口，覆盖 44 个 provider。新增型号、同型号映射和待核实范围见 [2026-11-15 核对记录](docs/sota-review-2026-11-15.md)。
+`data.json` 中的 `sota` 对象包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 和官方 `source`。当前标记 166 个模型入口，覆盖 44 个 provider。最近一次针对 OpenAI、Google、Anthropic、Qwen 及新增同型号入口的复核见 [2026-11-19 核对记录](docs/sota-review-2026-11-19.md)；其余存量标记保留原核对日期。
 
 聚合平台与区域入口仅继承已核实的同型号标记。固定快照及明确的同型号批处理入口可一并标记；MiMo UltraSpeed 与 Kimi Highspeed 有官方同能力说明。未确认映射的 Prime、Pro、Fast、免费变体和动态 latest 路由不自动继承；未获独立证据的普通别名不自动等同最新日期快照。
 
 同步脚本按 `(provider, id)` 保留存量标记；源站删除型号时同时移除对应标记，新型号默认未标记。更新旗舰时需重新核实官方信息，并移除已被替代型号的 `sota` 对象；仅同步目录不会刷新核对日期或自动认定新旗舰。
 
+发布时间补充见 [2026-11-19 日期核对记录](docs/model-release-review-2026-11-19.md)。`release.date`／`release.source` 为 SOTA 页和 PK 共用的发布信息；只有月份时保留月份，次级来源以 `release.sourceType: secondary` 标注。
+
 ## 更新 SOTA 的项目级 Skill
 
-项目提供 [update-sota-models](.agents/skills/update-sota-models/SKILL.md)，支持参考 AIHOT 榜单和官方资料更新旗舰标记，并校验只有 SOTA 字段发生变化。
+项目提供 [update-sota-models](.agents/skills/update-sota-models/SKILL.md)，支持参考 AIHOT 榜单和官方资料更新旗舰标记，并校验模型数据仅修改 SOTA 与经核实的发布日期字段。
 
 下次可直接说：`使用 $update-sota-models 刷新所有模型的 SOTA 状态`。默认不提交、不推送、不部署。
 

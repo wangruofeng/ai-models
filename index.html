@@ -24,7 +24,7 @@
 <body>
   <nav class="sticky-nav">
     <div class="sticky-nav-inner">
-      <span class="nav-project-name"><img class="nav-project-icon" src="icon.svg" width="32" height="32" alt=""><span data-i18n="h1">Model Catalog</span></span>
+      <a class="nav-project-name" href="index.html"><img class="nav-project-icon" src="icon.svg" width="32" height="32" alt=""><span data-i18n="h1">Model Catalog</span></a>
       <div class="sticky-nav-controls home-nav-controls">
         <a class="nav-toggle" href="sota.html" data-i18n="sotaPage">SOTA models</a>
         <button class="nav-toggle" id="api-open" type="button" aria-haspopup="dialog" data-i18n="apiTitle">API Base URLs</button>
@@ -57,7 +57,7 @@
     <section class="surface-panel content-card data-table-card">
       <header class="content-card-header">
         <h2 class="content-card-title" data-i18n="h2">All models</h2>
-        <div class="content-card-actions"><button class="text-control" id="pk-toggle" type="button" aria-pressed="false" data-i18n="pkEnter">Start PK</button><span id="model-count" aria-live="polite">&hellip;</span></div>
+        <div class="content-card-actions"><button class="text-control" id="pk-toggle" type="button" aria-keyshortcuts="Alt+P" aria-pressed="false" data-i18n="pkEnter">Start PK</button><span id="model-count" aria-live="polite">&hellip;</span></div>
       </header>
       <div class="content-card-body">
         <div class="action-bar models-action-bar">
@@ -161,8 +161,12 @@
   <dialog class="pk-dialog" id="pk-dialog" aria-labelledby="pk-title">
     <div class="pk-header">
       <h2 id="pk-title" data-i18n="pkTitle">Model PK</h2>
-      <button class="text-control" id="pk-close" type="button" data-i18n="pkClose">Close</button>
+      <div class="pk-header-actions">
+        <button class="pk-share" id="pk-share" type="button" aria-label="Share comparison" title="Share comparison" data-i18n-aria="pkShare" data-i18n-title="pkShare"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13V2m-4 4 4-4 4 4M4 10v7h12v-7"/></svg></button>
+        <button class="dialog-close" id="pk-close" type="button" aria-label="Close" title="Close" data-i18n-aria="pkClose" data-i18n-title="pkClose"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg></button>
+      </div>
     </div>
+    <div id="pk-share-feedback" class="pk-share-feedback" role="status" hidden></div>
     <div class="data-table-wrap pk-table-wrap" tabindex="0" role="region" aria-labelledby="pk-title">
       <table class="data-table pk-table" id="pk-table"></table>
     </div>
@@ -171,7 +175,7 @@
   <dialog class="api-dialog" id="api-dialog" aria-labelledby="api-title">
     <header class="api-header">
       <h2 id="api-title" data-i18n="apiTitle">API Base URLs</h2>
-      <form method="dialog"><button class="nav-toggle" data-i18n="pkClose">Close</button></form>
+      <form method="dialog"><button class="dialog-close" type="submit" aria-label="Close" title="Close" data-i18n-aria="pkClose" data-i18n-title="pkClose"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg></button></form>
     </header>
     <p class="api-note" data-i18n="apiNote">Use the Base URL for your protocol. Replace any {placeholders} with your values.</p>
     <div class="api-filters">
