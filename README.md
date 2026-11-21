@@ -6,7 +6,7 @@
 
 ## 数据
 
-最近同步：2026-11-21。pi.dev/models 源站共 1698 个模型，另保留 145 个官方补充条目，合计 1843 个模型、47 个 provider。
+最近同步：2026-11-22。pi.dev/models 源站共 1698 个模型，另保留 145 个官方补充条目，合计 1843 个模型、47 个 provider。
 
 
 Gemini 4 Neon 尚未被本次 Pi 快照收录，已根据 [Google 2026-11-18 官方公告](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/)补充到 Google 分组（`gemini-4-neon`）：上下文 100 万 tokens，输入／输出／缓存读取分别为 $3／$15／$0.15 每百万 tokens；缓存写入价格未公布，保留 `null`。核对日期为 2026-11-19。
