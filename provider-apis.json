@@ -6,7 +6,7 @@
     "endpoints": [
       {"protocol": "openai-completions", "baseUrl": "https://bedrock-runtime.{region}.amazonaws.com/openai/v1", "source": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-chat-completions.html", "sourceType": "official"},
       {"protocol": "anthropic-messages", "baseUrl": "https://bedrock-runtime.{region}.amazonaws.com/anthropic", "source": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-messages-api.html", "sourceType": "official"},
-      {"protocol": "openai-responses", "baseUrl": "https://bedrock-runtime.{region}.amazonaws.com/openai/v1", "source": "https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html", "sourceType": "official"}
+      {"protocol": "openai-responses", "baseUrl": "https://bedrock-runtime.{region}.amazonaws.com/openai/v1", "source": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-responses-api.html", "sourceType": "official"}
     ]
   },
   {
@@ -39,8 +39,11 @@
     "id": "baseten",
     "name": "Baseten",
     "endpoints": [
-      {"protocol": "openai-completions", "baseUrl": "https://inference.baseten.co/v1", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/baseten.json", "sourceType": "pi"}
-    ]
+      {"protocol": "openai-completions", "baseUrl": "https://inference.baseten.co/v1", "source": "https://www.baseten.co/resources/changelog/responses-api-format-generally-available/", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://inference.baseten.co/v1", "source": "https://docs.baseten.co/reference/inference-api/responses", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://inference.baseten.co", "source": "https://docs.baseten.co/reference/inference-api/messages", "sourceType": "official"}
+    ],
+    "accessNote": {"zh": "Messages 接口需按官方示例附带 Authorization: Bearer 鉴权头；不同模型支持范围以官方文档为准。", "en": "For Messages, include an Authorization: Bearer header as shown in the official example. Supported models vary by API format."}
   },
   {
     "id": "cerebras",
@@ -54,10 +57,12 @@
     "name": "Cloudflare AI Gateway",
     "nameZh": "Cloudflare AI 网关",
     "endpoints": [
-      {"protocol": "openai-completions", "baseUrl": "https://gateway.ai.cloudflare.com/v1/{CLOUDFLARE_ACCOUNT_ID}/{CLOUDFLARE_GATEWAY_ID}/compat", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/cloudflare-ai-gateway.json", "sourceType": "pi"},
+      {"protocol": "openai-completions", "baseUrl": "https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/v1", "source": "https://developers.cloudflare.com/ai-gateway/usage/rest-api/", "sourceType": "official"},
+      {"protocol": "openai-completions", "baseUrl": "https://gateway.ai.cloudflare.com/v1/{CLOUDFLARE_ACCOUNT_ID}/{CLOUDFLARE_GATEWAY_ID}/compat", "source": "https://developers.cloudflare.com/ai-gateway/usage/chat-completion/", "sourceType": "official"},
       {"protocol": "anthropic-messages", "baseUrl": "https://gateway.ai.cloudflare.com/v1/{CLOUDFLARE_ACCOUNT_ID}/{CLOUDFLARE_GATEWAY_ID}/anthropic", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/cloudflare-ai-gateway.json", "sourceType": "pi"},
       {"protocol": "openai-responses", "baseUrl": "https://gateway.ai.cloudflare.com/v1/{CLOUDFLARE_ACCOUNT_ID}/{CLOUDFLARE_GATEWAY_ID}/openai", "source": "https://cdn.jsdelivr.net/npm/@earendil-works/pi-ai@1.5.2/dist/providers/data/cloudflare-ai-gateway.json", "sourceType": "pi"}
-    ]
+    ],
+    "accessNote": {"zh": "单模型 Chat Completions 优先使用 api.cloudflare.com 地址，并按文档配置 Cloudflare Token、模型名及网关头。旧 /compat 地址对单模型调用已弃用但仍兼容存量与动态路由；其他协议保留原生 provider 路由。", "en": "For single-model Chat Completions, prefer api.cloudflare.com with the documented Cloudflare token, model name and gateway header. The legacy /compat route is deprecated for single-model calls but retained for existing integrations and dynamic routing; other protocols use provider-native routes."}
   },
   {
     "id": "cloudflare-workers-ai",
@@ -111,8 +116,10 @@
     "name": "Google Cloud Vertex AI",
     "nameZh": "谷歌云 Vertex AI",
     "endpoints": [
-      {"protocol": "openai-completions", "baseUrl": "https://aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/endpoints/openapi", "source": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/samples/generativeaionvertexai-gemini-chat-completions-streaming", "sourceType": "official"}
-    ]
+      {"protocol": "openai-completions", "baseUrl": "https://aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/endpoints/openapi", "source": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/samples/generativeaionvertexai-gemini-chat-completions-streaming", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://aiplatform.googleapis.com/v1/projects/{project_id}/locations/global/endpoints/openapi", "source": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/grok/responses", "sourceType": "official"}
+    ],
+    "accessNote": {"zh": "此处 Responses 地址为 global 区域的 Grok 接口，不代表 Gemini 等所有 Vertex 模型都支持 Responses；使用项目凭据及官方列出的支持型号。", "en": "The Responses URL is the global Grok endpoint, not universal Responses support for Gemini or every Vertex model. Use project credentials and an officially supported model."}
   },
   {
     "id": "groq",
@@ -128,7 +135,8 @@
     "nameZh": "Hugging Face 推理服务",
     "endpoints": [
       {"protocol": "openai-completions", "baseUrl": "https://router.huggingface.co/v1", "source": "https://huggingface.co/docs/inference-providers/en/tasks/chat-completion", "sourceType": "official"},
-      {"protocol": "openai-responses", "baseUrl": "https://router.huggingface.co/v1", "source": "https://huggingface.co/docs/inference-providers/guides/responses-api", "sourceType": "official"}
+      {"protocol": "openai-responses", "baseUrl": "https://router.huggingface.co/v1", "source": "https://huggingface.co/docs/inference-providers/guides/responses-api", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://router.huggingface.co", "source": "https://huggingface.co/docs/inference-providers/guides/messages-api", "sourceType": "official"}
     ]
   },
   {
@@ -165,9 +173,9 @@
     "name": "MiniMax China",
     "nameZh": "MiniMax 中国区",
     "endpoints": [
-      {"protocol": "openai-completions", "baseUrl": "https://api.minimax.cn/v1", "source": "https://platform.minimaxi.com/docs/api-reference/text-openai-api", "sourceType": "official"},
-      {"protocol": "anthropic-messages", "baseUrl": "https://api.minimax.cn/anthropic", "source": "https://platform.minimaxi.com/docs/api-reference/text-anthropic-api", "sourceType": "official"},
-      {"protocol": "openai-responses", "baseUrl": "https://api.minimax.cn/v1", "source": "https://platform.minimaxi.com/docs/api-reference/responses-create", "sourceType": "official"}
+      {"protocol": "openai-completions", "baseUrl": "https://api.minimax.cn/v1", "source": "https://platform.minimax.cn/docs/api-reference/text-openai-api", "sourceType": "official"},
+      {"protocol": "anthropic-messages", "baseUrl": "https://api.minimax.cn/anthropic", "source": "https://platform.minimax.cn/docs/api-reference/text-anthropic-api", "sourceType": "official"},
+      {"protocol": "openai-responses", "baseUrl": "https://api.minimax.cn/v1", "source": "https://platform.minimax.cn/docs/api-reference/responses-create", "sourceType": "official"}
     ]
   },
   {
@@ -203,7 +211,7 @@
     "name": "NVIDIA",
     "nameZh": "英伟达 NVIDIA",
     "endpoints": [
-      {"protocol": "openai-completions", "baseUrl": "https://integrate.api.nvidia.com/v1", "source": "https://docs.nvidia.com/openshell/latest/sandboxes/manage-providers", "sourceType": "official"}
+      {"protocol": "openai-completions", "baseUrl": "https://integrate.api.nvidia.com/v1", "source": "https://docs.nvidia.com/openshell/dev/how-it-works/providers/overview", "sourceType": "official"}
     ]
   },
   {

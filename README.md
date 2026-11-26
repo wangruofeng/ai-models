@@ -16,6 +16,8 @@ Gemini 4 Neon 尚未被本次 Pi 快照收录，已根据 [Google 2026-11-18 官
 
 `provider-apis.json` 独立维护接入地址。每个提供商包含 `id`（与目录中的 provider ID 对应）、`name`、可选的 `nameZh` 和 `endpoints`。目录和 API 地址共用供应商名称及品牌图标映射。每个端点包含 `protocol`、`baseUrl`、`source` 和 `sourceType`（`official`、`pi` 或 `community`）。填入对应协议的 SDK Base URL，按来源说明核对鉴权、可用模型及区域。带 `{占位符}` 的地址需要替换为自己的配置。
 
+API 地址于 2026-11-26 做了增量核对：补充 Baseten 的 Responses／Messages、Hugging Face Messages、Vertex Grok Responses，以及 Cloudflare 推荐的单模型 Chat 入口；更新失效或跳转的来源。Vertex 的 Responses 有模型与区域限制，Cloudflare 旧 `/compat` 仅保留兼容用途。完整依据和待核实项见 [本轮 API 地址记录](docs/api-protocol-audit-2026-11-26.md)。
+
 ### 智谱 API 与 Coding Plan
 
 国际区使用 **Z.ai API**（`zai-api`）和 **Z.ai Coding Plan**（`zai`），中国区使用 **BigModel API**（`zai-api-cn`）和 **BigModel Coding Plan**（`zai-coding-cn`）。两个按量 API 的 Chat Completions 地址使用各区域域名下的 `/api/paas/v4`，Coding Plan 对应 `/api/coding/paas/v4`。各协议和对应来源可在「API 地址」中查看。
@@ -129,17 +131,23 @@ npm run dev
 - 模型名链接指向原站对应详情页（克隆站不含详情路由）
 - 未复刻：导航 logo 右键菜单（Copy/Download SVG、Press Kit）、移动端 burger 抽屉菜单
 
-## SOTA 标记（2026-11-19 部分复核）
+## SOTA 标记（2026-11-26 核对）
 
-本项目将 SOTA 用作「模型厂商在相应能力方向的当前旗舰」标记，依据官方发布与模型说明人工维护，并参考 [AIHOT 综合榜](https://aihot.news/leaderboard)及[科研榜](https://aihot.news/leaderboard/category/reasoning)交叉检查型号更替。它不表示跨厂商榜单第一，也不把所有上榜模型自动标为 SOTA；榜单评测覆盖和更新时间不同，旧型号仍可能留在榜上。未标记可能表示未核实、目录未收录当前旗舰，或入口映射尚不明确。
+本项目将 SOTA 用作「模型厂商在相应能力方向的当前旗舰」标记，依据官方发布与模型说明人工维护，并参考 [AIHOT 模型榜](https://aihot.news/leaderboard)交叉核对。它不表示跨厂商榜单第一，也不把所有上榜型号自动标记。未标记可能表示未核实、当前旗舰未入库或入口映射不明。
 
-`data.json` 中的 `sota` 对象包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 和官方 `source`。当前标记 166 个模型入口，覆盖 44 个 provider。最近一次针对 OpenAI、Google、Anthropic、Qwen 及新增同型号入口的复核见 [2026-11-19 核对记录](docs/sota-review-2026-11-19.md)；其余存量标记保留原核对日期。
+`data.json` 的 `sota` 包含 `categories`（general／reasoning／coding／image）、`verifiedAt` 与官方 `source`。本轮目录同步后又合并远端最新数据，当前共 1841 条、47 个 provider；SOTA 最终为 170 个入口、44 个 provider。本地已核实的标记使用 2026-11-26 日期；远端独有且本轮未复核的标记保留原日期。详细来源与未核实范围见 [本轮记录](docs/sota-review-2026-11-26.md)，上轮记录见 [2026-11-13](docs/sota-review-2026-11-13.md)。SOTA 阶段没有改动其他数据字段；目录同步阶段另有型号、上下文和价格变化。
 
-聚合平台与区域入口仅继承已核实的同型号标记。固定快照及明确的同型号批处理入口可一并标记；MiMo UltraSpeed 与 Kimi Highspeed 有官方同能力说明。未确认映射的 Prime、Pro、Fast、免费变体和动态 latest 路由不自动继承；未获独立证据的普通别名不自动等同最新日期快照。
+本轮用 GPT-6.2 Astra 替代 GPT-6 Astra、GLM-5.4 替代 GLM-5.3，并补充 Qwen4 Max 及新入库的已确认同型号入口。Google 官方仍将 Carbon 用于深度验证与长时推理、Neon 用于复杂交互式工程任务，因此 Carbon 保留 reasoning，Neon 标记 general／coding，而非仅凭榜单名次认定 Carbon 已被淘汰。GLM-5.4 官方目前说明 Coding Plan 可用、Model API 待安全评估，标记不代表所有入口均已开放调用。
 
-同步脚本按 `(provider, id)` 保留存量标记；源站删除型号时同时移除对应标记，新型号默认未标记。更新旗舰时需重新核实官方信息，并移除已被替代型号的 `sota` 对象；仅同步目录不会刷新核对日期或自动认定新旗舰。
+固定快照、区域和 batch 仅在身份清楚时继承；Highspeed／UltraSpeed 需官方同能力说明。未确认的 Fast、Ultrafast、Prime、Pro、免费变体及动态 latest 不自动继承。Qwen4 Max Preview 不自动等同正式版。Ling 3.2 Flash 的官方卡未能读取，Air 与旧 Flash 的全面替代关系也未确认，因此保留旧标记及日期，未把新版本直接标为旗舰。
 
-发布时间补充见 [2026-11-19 日期核对记录](docs/model-release-review-2026-11-19.md)。`release.date`／`release.source` 为 SOTA 页和 PK 共用的发布信息；只有月份时保留月份，次级来源以 `release.sourceType: secondary` 标注。
+当前目录尚未收录 GPT Image 2.6；页面保留已入库的图像旗舰标记，不新增目录外型号。其他小型厂商仍有未核实项，全目录扫描不等于每个厂商均已确认。目录同步脚本按 `(p, id)` 保留存量标记，新型号默认未标记；同步本身不会刷新核对日期或自动认定旗舰。
+
+发布时间补充见 [2026-11-19 日期核对记录](docs/model-release-review-2026-11-19.md)。`release.date`／`release.source` 为 SOTA 页和 PK 共用的发布信息；远端现有日期与来源完整保留。
+
+SOTA 独立页继续直接读取 `data.json`，通过精确入口映射补齐 GLM-5.4、Hy4、Step 5 Preview、Inkling 2 Small、Beam、Command A+、Ling 3.1 Flash 1019、Solar Pro 4 与 Nano Banana Pro。目前展示 27 个不同型号，不重复展示地区与托管平台。补齐 31 条同型号入口的发布信息后，170 个 SOTA 入口均有 `release`；GLM-5.4 的 2026-11-23 日期来自 BenchLM 次级来源，已用 `sourceType: secondary` 标注。
+
+SOTA 页标题右侧的图标可一键切换时间线卡片与紧凑列表，默认使用时间线；视图偏好保存在浏览器本地，刷新和切换语言后保留。列表保留研发方、模型名称、发布日期、能力与官方来源。
 
 ## 更新 SOTA 的项目级 Skill
 

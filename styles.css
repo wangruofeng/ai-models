@@ -994,6 +994,54 @@ body:not(.pk-mode) .pk-select { display: none; }
   .sota-event:nth-child(even) .sota-release { grid-column: 1; text-align: end; }
 }
 
+
+/* SOTA 视图切换：同一份模型内容在时间线与紧凑列表之间切换。 */
+.sota-heading { position: relative; }
+.sota-heading h1 { padding-inline: 46px; }
+.sota-view-toggle { position: absolute; inset-inline-end: 0; top: 0; display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: var(--radius-control); background: var(--bg-input); color: var(--text-2); cursor: pointer; }
+.sota-view-toggle:hover { color: var(--text); background: var(--btn-bg); }
+.sota-view-toggle:focus-visible { outline: 2px solid var(--provider-text); outline-offset: 3px; }
+.sota-view-toggle svg { width: 20px; height: 20px; grid-area: 1 / 1; }
+.sota-view-toggle .sota-timeline-icon { display: none; }
+.sota-page[data-view="list"] .sota-list-icon { display: none; }
+.sota-page[data-view="list"] .sota-timeline-icon { display: block; }
+.sota-page[data-view="list"] .sota-timeline { display: block; margin: 0; padding: 0; border: 0; }
+.sota-page[data-view="list"] .sota-timeline::before,
+.sota-page[data-view="list"] .sota-event::before { display: none; }
+.sota-page[data-view="list"] .sota-event { display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: center; gap: 24px; padding: 23px 0; border-bottom: 1px solid color-mix(in srgb, var(--border) 55%, transparent); }
+.sota-page[data-view="list"] .sota-event:first-child { border-top: 1px solid color-mix(in srgb, var(--border) 55%, transparent); }
+.sota-page[data-view="list"] .sota-release { grid-column: 1; grid-row: 1; margin: 0; text-align: start; font-size: 12px; font-variant-numeric: tabular-nums; }
+.sota-page[data-view="list"] .sota-release a { color: var(--text-3); text-decoration: none; }
+.sota-page[data-view="list"] .sota-release a:hover { color: var(--provider-text); text-decoration: underline; text-underline-offset: 4px; }
+.sota-page[data-view="list"] .sota-card { grid-column: 2; grid-row: 1; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; transform: none; gap: 10px; transition: none; }
+.sota-page[data-view="list"] .sota-model-header { align-items: center; gap: 14px; }
+.sota-page[data-view="list"] .sota-model-header > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.sota-page[data-view="list"] .sota-provider-icon { flex-basis: 30px; height: 30px; background: transparent; border-radius: 0; }
+.sota-page[data-view="list"] .sota-provider-icon .brand-icon { width: 24px; height: 24px; }
+.sota-page[data-view="list"] .sota-model-header h2 { order: -1; margin: 0; font-size: 21px; font-weight: 600; line-height: 1.3; }
+.sota-page[data-view="list"] .sota-model-header code { display: none; }
+.sota-page[data-view="list"] .sota-provider-name { color: var(--text-3); font-size: 12px; line-height: 1.4; }
+.sota-page[data-view="list"] .sota-capabilities { gap: 0; }
+.sota-page[data-view="list"] .sota-capabilities > span { min-height: 0; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--text-3); font-family: inherit; font-size: 12px; line-height: 1.5; }
+.sota-page[data-view="list"] .sota-capabilities > span + span::before { content: "·"; padding-inline: 7px; opacity: .6; }
+.sota-page[data-view="list"] .sota-model-meta a { color: var(--text-2); font-size: 12px; text-decoration-line: underline; text-decoration-style: dashed; text-decoration-color: var(--text-3); text-underline-offset: 4px; }
+.sota-page[data-view="list"] .sota-model-meta a:hover { color: var(--provider-text); }
+@media (min-width: 760px) {
+  .sota-page[data-view="list"] .sota-card { grid-template-columns: minmax(0, 1fr) 184px; align-items: center; gap: 28px; }
+  .sota-page[data-view="list"] .sota-model-meta { flex-direction: column; align-items: flex-end; gap: 5px; }
+}
+@media (max-width: 759px) {
+  .sota-page[data-view="list"] .sota-event { grid-template-columns: 92px minmax(0, 1fr); gap: 14px; padding-block: 20px; }
+  .sota-page[data-view="list"] .sota-model-header h2 { font-size: 19px; }
+  .sota-page[data-view="list"] .sota-model-meta { margin-inline-start: 44px; }
+}
+@media (max-width: 480px) {
+  .sota-page[data-view="list"] .sota-event { grid-template-columns: 1fr; gap: 9px; padding-block: 20px; }
+  .sota-page[data-view="list"] .sota-card { grid-column: 1; grid-row: 2; }
+  .sota-page[data-view="list"] .sota-release { margin-inline-start: 44px; }
+  .sota-heading h1 { padding-inline-start: 0; }
+}
+
 .api-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .api-filters > * { display: grid; align-content: space-between; gap: 6px; min-width: 0; }
 .api-results { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; margin-top: 16px; }

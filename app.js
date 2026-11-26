@@ -3,6 +3,23 @@
   'use strict';
 
   var sotaList = document.getElementById('sota-models');
+  var sotaViewToggle = document.getElementById('sota-view-toggle');
+  var sotaView = 'timeline';
+  if (sotaList) {
+    try { if (localStorage.getItem('pi-sota-view') === 'list') sotaView = 'list'; } catch (e) { /* ignore */ }
+  }
+  function updateSotaView() {
+    if (!sotaViewToggle) return;
+    document.querySelector('.sota-page').dataset.view = sotaView;
+    sotaViewToggle.setAttribute('aria-pressed', String(sotaView === 'list'));
+    sotaViewToggle.setAttribute('aria-label', t('sotaListView'));
+    sotaViewToggle.title = t(sotaView === 'list' ? 'sotaShowTimeline' : 'sotaShowList');
+  }
+  if (sotaViewToggle) sotaViewToggle.addEventListener('click', function () {
+    sotaView = sotaView === 'list' ? 'timeline' : 'list';
+    try { localStorage.setItem('pi-sota-view', sotaView); } catch (e) { /* ignore */ }
+    updateSotaView();
+  });
   var isChangelog = document.body.classList.contains('changelog');
   var githubLink = document.getElementById('footer-github');
   if (githubLink) githubLink.hidden = !(
@@ -106,6 +123,9 @@
       sotaNo: 'Unmarked',
       sotaHelp: 'Manually verified flagship models by capability; not a cross-vendor ranking. Unmarked models may be unverified.',
       sotaCategories: { general: 'General', reasoning: 'Reasoning', coding: 'Coding', image: 'Image' },
+      sotaListView: 'List view',
+      sotaShowList: 'Switch to list view',
+      sotaShowTimeline: 'Switch to timeline view',
       sotaPage: 'SOTA models',
       sotaPageDescription: 'Flagship models by developer, newest first.',
       sotaPageSource: 'Official source',
@@ -206,6 +226,9 @@
       sotaNo: '未标记',
       sotaHelp: '按主要能力人工核实的供应商旗舰，不代表跨厂商排名；未标记也可能是尚未核实。',
       sotaCategories: { general: '通用', reasoning: '推理', coding: '编程', image: '图像' },
+      sotaListView: '列表模式',
+      sotaShowList: '切换为列表模式',
+      sotaShowTimeline: '切换为时间线模式',
       sotaPage: 'SOTA 模型',
       sotaPageDescription: '按研发方汇总当前旗舰模型，按发布日期从新到旧排列。',
       sotaPageSource: '官方依据',
@@ -287,6 +310,7 @@
       if (v != null) el.title = v;
     });
     refreshToggleLabels();
+    updateSotaView();
     if (sotaList || isChangelog) return;
     els.nameFilter.placeholder = t('filterPlaceholder');
     document.getElementById('api-search').placeholder = t('apiSearchPlaceholder');
@@ -575,10 +599,24 @@
       if (!models.has(model.id) || model.p === provider) models.set(model.id, model);
     });
     // 原厂按量入口尚未入库时，仅用已核实的精确型号代表研发方，不展示分发商重复卡片。
-    var representatives = [{ provider: 'qwen', name: 'Qwen', brand: 'qwen', p: 'openrouter', id: 'qwen/qwen4-max' }];
+    var representatives = [
+      { provider: 'qwen', name: 'Qwen', brand: 'qwen', p: 'openrouter', id: 'qwen/qwen4-max' },
+      { provider: 'zai-api', name: 'Z.ai', brand: 'zai', p: 'zai', id: 'glm-5.4' },
+      { provider: 'tencent', name: 'Tencent', brand: 'tencent', p: 'openrouter', id: 'tencent/hy4' },
+      { provider: 'stepfun', name: 'StepFun', brand: 'stepfun', p: 'openrouter', id: 'stepfun/step-5-preview' },
+      { provider: 'thinkingmachines', name: 'Thinking Machines Lab', brand: 'model', p: 'openrouter', id: 'thinkingmachines/inkling-2-small' },
+      { provider: 'reflection', name: 'Reflection', brand: 'model', p: 'openrouter', id: 'reflection/beam-1.0-501b-a23b' },
+      { provider: 'cohere', name: 'Cohere', brand: 'cohere', p: 'openrouter', id: 'cohere/command-a-plus' },
+      { provider: 'ant-ling', name: 'inclusionAI', brand: 'antgroup', p: 'vercel-ai-gateway', id: 'inclusionai/ling-3.1-flash-1019' },
+      { provider: 'upstage', name: 'Upstage', brand: 'model', p: 'openrouter', id: 'upstage/solar-pro4' },
+      { provider: 'google', name: 'Google Gemini', brand: 'gemini', p: 'openrouter', id: 'google/gemini-3-pro-image' }
+    ];
     representatives.forEach(function (entry) {
       var model = data.models.find(function (m) { return m.p === entry.p && m.id === entry.id && m.sota; });
-      if (model && !groups.has(entry.provider)) groups.set(entry.provider, new Map([[model.id, model]]));
+      if (!model) return;
+      if (!groups.has(entry.provider)) groups.set(entry.provider, new Map());
+      var models = groups.get(entry.provider);
+      if (!models.has(model.id)) models.set(model.id, model);
     });
     var entries = [];
     groups.forEach(function (models, provider) {
