@@ -33,8 +33,7 @@ Cloudflare Pages 直接连接 GitHub 仓库，推送到 `main` 后自动部署�
 
 ## 更新目录与旗舰标记
 
-项目提供 [update-sota-models](../.agents/skills/update-sota-models/SKILL.md)，支持参考 AIHOT 榜单和官方资料更新旗舰标记，并校验模型数据仅修改 SOTA 与经核实的发布日期字段。
+项目提供两个技能来更新模型数据。
 
-下次可直接说：`使用 $update-sota-models 刷新所有模型的 SOTA 状态`。默认不提交、不推送、不部署。
-
-更新目录与价格时使用 [update-model-catalog](../.agents/skills/update-model-catalog/SKILL.md)。脚本会更新 README 的数据同步摘要。
+- [update-model-catalog](../.agents/skills/update-model-catalog/SKILL.md) 从 Pi 同步模型目录、上下文窗口和价格，并更新 README 的数据同步摘要。
+- [update-sota-models](../.agents/skills/update-sota-models/SKILL.md) 参考 AIHOT 榜单查找旗舰候选，依据厂商资料更新 SOTA 标记，并补充经核实的模型发布日期。
