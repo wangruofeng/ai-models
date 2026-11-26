@@ -1,6 +1,6 @@
 module.exports = {
-  server: '.',
-  files: ['*.html', '*.css', '*.js', 'data.json', 'provider-apis.json', 'icon.svg', 'assets/**/*'],
+  server: { baseDir: '.', middleware: [require('./local-insights/server.cjs').middleware] },
+  files: ['*.html', '*.css', '*.js', 'data.json', 'provider-apis.json', 'icon.svg', 'assets/**/*', 'local-insights/*'],
   port: 3456,
   open: false,
   ui: false,

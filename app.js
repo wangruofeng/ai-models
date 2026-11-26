@@ -20,6 +20,8 @@
     try { localStorage.setItem('pi-sota-view', sotaView); } catch (e) { /* ignore */ }
     updateSotaView();
   });
+  var insightsLink = document.getElementById('insights-link');
+  if (insightsLink) insightsLink.hidden = !window.insightsTestEnabled();
   var isChangelog = document.body.classList.contains('changelog');
   var githubLink = document.getElementById('footer-github');
   if (githubLink) githubLink.hidden = !(
@@ -126,6 +128,7 @@
       sotaListView: 'List view',
       sotaShowList: 'Switch to list view',
       sotaShowTimeline: 'Switch to timeline view',
+      insightsPage: 'Data insights',
       sotaPage: 'SOTA models',
       sotaPageDescription: 'Flagship models by developer, newest first.',
       sotaPageSource: 'Official source',
@@ -229,6 +232,7 @@
       sotaListView: '列表模式',
       sotaShowList: '切换为列表模式',
       sotaShowTimeline: '切换为时间线模式',
+      insightsPage: '数据洞察',
       sotaPage: 'SOTA 模型',
       sotaPageDescription: '按研发方汇总当前旗舰模型，按发布日期从新到旧排列。',
       sotaPageSource: '官方依据',
